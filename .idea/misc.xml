@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/drawable/ic_favorite.xml" value="0.3687179487179487" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/drawable/ic_favorite_outlined.xml" value="0.3728205128205128" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/drawable/ic_home.xml" value="0.3728205128205128" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/drawable/outline_rounded_rectangle.xml" value="0.3728205128205128" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/drawable/toggle_favorite.xml" value="0.3728205128205128" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/activity_detail.xml" value="0.1" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/activity_main.xml" value="0.3569230769230769" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/activity_setting.xml" value="0.3625" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/cardview_item_column.xml" value="0.3625" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/cardview_list.xml" value="0.67" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/cardview_top.xml" value="0.33" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/fragment_favorite.xml" value="0.31266149870801035" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/fragment_home.xml" value="0.3569230769230769" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/fragment_movies.xml" value="0.21296296296296297" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/fragment_profile.xml" value="0.25" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/fragment_tv_shows.xml" value="0.35833333333333334" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/item_column.xml" value="0.3625" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/layout/tv_shows_fragment.xml" value="0.35833333333333334" />
+        <entry key="..\:/Users/ANDRE/AndroidStudioProjects/MovieJam/app/src/main/res/menu/bottom_nav_menu.xml" value="0.35833333333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

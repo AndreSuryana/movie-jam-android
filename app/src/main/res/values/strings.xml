@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Movie Jam</string>
+    <string name="profile_images">Profile Images</string>
+    <string name="greetings_text">Hello, Username</string>
+    <string name="suggestion_text">Watch your favorite movies or tv shows now!</string>
+    <string name="poster_images">Poster Images</string>
+    <string name="title">Title</string>
+    <string name="rating">R</string>
+    <string name="genre">Genre</string>
+    <string name="popular_movies">Popular Movies</string>
+    <string name="popular_tv_shows">Popular TV Shows</string>
+    <string name="title_home">Home</string>
+    <string name="title_tv_shows">TV Shows</string>
+    <string name="title_movies">Movies</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="title_profile">Profile</string>
+    <string name="year">( %1$s )</string>
+    <string name="date">17/11/2001</string>
+    <string name="dot">•</string>
+    <string name="duration">1h 2m</string>
+    <string name="movies_title">Movie Title</string>
+    <string name="release_date">11/17/2001</string>
+    <string name="status_label">Status</string>
+    <string name="language_label">Language</string>
+    <string name="creator_label">Creator</string>
+    <string name="overview_label">Overview</string>
+</resources>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="8dp"
+    card_view:cardElevation="0dp"
+    card_view:cardBackgroundColor="@color/transparent"
+    android:outlineProvider="background"
+    card_view:cardCornerRadius="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_poster"
+            android:layout_width="50dp"
+            android:layout_height="75dp"
+            android:contentDescription="@string/poster_images"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title"
+            style="@style/CardViewListTitle"
+            android:text="@string/title"
+            card_view:layout_constraintBottom_toTopOf="@+id/tv_rating"
+            card_view:layout_constraintStart_toStartOf="@+id/tv_rating"
+            card_view:layout_constraintTop_toTopOf="@+id/iv_poster" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginStart="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:background="@drawable/outline_rounded_rectangle"
+            android:text="@string/rating"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            card_view:layout_constraintBottom_toBottomOf="@+id/iv_poster"
+            card_view:layout_constraintStart_toEndOf="@+id/iv_poster"
+            card_view:layout_constraintTop_toTopOf="@+id/iv_poster" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_dots_divider1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dot"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            android:layout_marginStart="4dp"
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_rating"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_rating"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_rating" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            android:layout_marginStart="4dp"
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_dots_divider1"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_dots_divider1"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_dots_divider1" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_dots_divider2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dot"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            android:layout_marginStart="4dp"
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_date"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_date"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_date" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/duration"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            android:layout_marginStart="4dp"
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_dots_divider2"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_dots_divider2"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_dots_divider2" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/genre"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            card_view:layout_constraintBottom_toBottomOf="@+id/iv_poster"
+            card_view:layout_constraintStart_toStartOf="@+id/tv_rating"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_rating" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

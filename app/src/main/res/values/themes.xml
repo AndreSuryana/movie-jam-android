@@ -1,0 +1,106 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.MovieJam" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="android:colorPrimaryDark">@color/black</item>
+        <item name="android:colorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:colorAccent">@color/grey</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <!-- Custom Styling -->
+    <style name="ShapeAppearanceOverlay.App.CornerSize10Dp" parent="">
+        <item name="cornerSize">10dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize20Dp" parent="">
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="ToolbarTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="Theme.MaterialComponents">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+    </style>
+
+    <!-- Card View List Styling -->
+    <style name="CardViewListTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Card View List Styling -->
+    <style name="CardViewTopTitle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Home Fragment Styling -->
+    <style name="HomeProfileImages">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginTop">32dp</item>
+    </style>
+
+    <style name="HomeGreetingUser">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="HomeSuggestionText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="HomeTopRecyclerView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+    <style name="HomeContentTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="HomeContentRecyclerView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+    </style>
+
+</resources>
