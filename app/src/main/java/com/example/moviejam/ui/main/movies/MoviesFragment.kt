@@ -1,4 +1,4 @@
-package com.example.moviejam.ui.movies
+package com.example.moviejam.ui.main.movies
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,15 +11,17 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviejam.adapter.DataAdapter
-import com.example.moviejam.data.DataEntity
+import com.example.moviejam.data.model.DataEntity
 import com.example.moviejam.databinding.FragmentMoviesBinding
 import com.example.moviejam.repository.DummyDataRepository
 import com.example.moviejam.ui.detail.DetailActivity
+import com.example.moviejam.utils.ViewModelFactory
 
 class MoviesFragment : Fragment() {
 
     private lateinit var fragmentMoviesBinding: FragmentMoviesBinding
     private lateinit var moviesViewModel: MoviesViewModel
+    private lateinit var moviesAdapter: DataAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,16 +35,36 @@ class MoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Setup View Model
-        val repository = DummyDataRepository()
+        setupUI()
+        setupViewModel()
+        setupObserver()
+    }
+
+    private fun setupUI() {
+        moviesAdapter = DataAdapter()
+        with(fragmentMoviesBinding.rvMovies) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = moviesAdapter
+        }
+        moviesAdapter.setOnItemClickListener(object : DataAdapter.OnItemClickListener {
+            override fun onClick(data: DataEntity) {
+                Intent(activity, DetailActivity::class.java).also {
+                    it.putExtra(DetailActivity.EXTRA_DATA, data)
+                    startActivity(it)
+                }
+            }
+        })
+    }
+
+    private fun setupViewModel() {
         moviesViewModel = ViewModelProvider(
             this,
-            MoviesViewModelFactory(repository)
+            ViewModelFactory(DummyDataRepository(context))
         )[MoviesViewModel::class.java]
+    }
 
-        // Setup Movies Content
-        val moviesAdapter = DataAdapter()
-        moviesViewModel.setMovies(activity?.applicationContext)
+    private fun setupObserver() {
         moviesViewModel.listMovies.observe(viewLifecycleOwner, { event ->
             when (event) {
                 is MoviesViewModel.MoviesEvent.Success -> {
@@ -59,19 +81,6 @@ class MoviesFragment : Fragment() {
                 is MoviesViewModel.MoviesEvent.Empty -> {
                     showProgressBar()
                     showToast("Movies is Empty!")
-                }
-            }
-        })
-        with(fragmentMoviesBinding.rvMovies) {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = moviesAdapter
-        }
-        moviesAdapter.setOnItemClickListener(object : DataAdapter.OnItemClickListener {
-            override fun onClick(data: DataEntity) {
-                Intent(activity, DetailActivity::class.java).also {
-                    it.putExtra(DetailActivity.EXTRA_DATA, data)
-                    startActivity(it)
                 }
             }
         })

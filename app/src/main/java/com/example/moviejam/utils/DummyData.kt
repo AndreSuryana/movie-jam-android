@@ -2,7 +2,7 @@ package com.example.moviejam.utils
 
 import android.content.Context
 import android.util.Log
-import com.example.moviejam.data.DataEntity
+import com.example.moviejam.data.model.DataEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

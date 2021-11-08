@@ -1,16 +1,16 @@
 package com.example.moviejam.dispatchers
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlin.coroutines.CoroutineContext
 
 class MainDispatcher : DispatcherProvider {
 
-    override val main: CoroutineDispatcher
+    override val main: CoroutineContext
         get() = Dispatchers.Main
-    override val io: CoroutineDispatcher
+    override val io: CoroutineContext
         get() = Dispatchers.IO
-    override val default: CoroutineDispatcher
+    override val default: CoroutineContext
         get() = Dispatchers.Default
-    override val unconfined: CoroutineDispatcher
+    override val unconfined: CoroutineContext
         get() = Dispatchers.Unconfined
 }

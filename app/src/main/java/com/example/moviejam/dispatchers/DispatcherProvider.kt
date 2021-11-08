@@ -1,11 +1,11 @@
 package com.example.moviejam.dispatchers
 
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlin.coroutines.CoroutineContext
 
 interface DispatcherProvider {
 
-    val main: CoroutineDispatcher
-    val io: CoroutineDispatcher
-    val default: CoroutineDispatcher
-    val unconfined: CoroutineDispatcher
+    val main: CoroutineContext
+    val io: CoroutineContext
+    val default: CoroutineContext
+    val unconfined: CoroutineContext
 }
