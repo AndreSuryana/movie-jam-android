@@ -1,4 +1,4 @@
-package com.example.moviejam.ui.profile
+package com.example.moviejam.ui.main.profile
 
 import androidx.lifecycle.ViewModel
 

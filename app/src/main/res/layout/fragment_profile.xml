@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.ProfileFragment">
+    tools:context=".ui.main.profile.ProfileFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -16,7 +16,6 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_back"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="start"
@@ -24,12 +23,10 @@
             android:background="@drawable/ic_back" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_toolbar_title"
             style="@style/ToolbarTextStyle"
             android:text="@string/title_profile"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_setting"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"

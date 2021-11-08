@@ -1,4 +1,4 @@
-package com.example.moviejam.ui.tvshows
+package com.example.moviejam.ui.main.tvshows
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,15 +11,17 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviejam.adapter.DataAdapter
-import com.example.moviejam.data.DataEntity
+import com.example.moviejam.data.model.DataEntity
 import com.example.moviejam.databinding.FragmentTvShowsBinding
 import com.example.moviejam.repository.DummyDataRepository
 import com.example.moviejam.ui.detail.DetailActivity
+import com.example.moviejam.utils.ViewModelFactory
 
 class TvShowsFragment : Fragment() {
 
     private lateinit var fragmentTvShowsBinding: FragmentTvShowsBinding
     private lateinit var tvShowsViewModel: TvShowsViewModel
+    private lateinit var tvShowsAdapter: DataAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,15 +35,36 @@ class TvShowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Setup View Model
-        val repository = DummyDataRepository()
-        tvShowsViewModel = ViewModelProvider(this, TvShowsViewModelFactory(repository))[TvShowsViewModel::class.java]
+        setupUI()
+        setupViewModel()
+        setupObserver()
+    }
 
-        // Setup TV Shows Content
-        val tvShowsAdapter = DataAdapter()
+    private fun setupUI() {
+        tvShowsAdapter = DataAdapter()
+        with(fragmentTvShowsBinding.rvTvShows) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = tvShowsAdapter
+        }
+        tvShowsAdapter.setOnItemClickListener(object : DataAdapter.OnItemClickListener {
+            override fun onClick(data: DataEntity) {
+                Intent(activity, DetailActivity::class.java).also {
+                    it.putExtra(DetailActivity.EXTRA_DATA, data)
+                    startActivity(it)
+                }
+            }
+        })
+    }
 
-        tvShowsViewModel.setTvShows(activity?.applicationContext)
+    private fun setupViewModel() {
+        tvShowsViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(DummyDataRepository(context))
+        )[TvShowsViewModel::class.java]
+    }
 
+    private fun setupObserver() {
         tvShowsViewModel.listTvShows.observe(viewLifecycleOwner, { event ->
             when (event) {
                 is TvShowsViewModel.TvShowsEvent.Success -> {
@@ -58,19 +81,6 @@ class TvShowsFragment : Fragment() {
                 is TvShowsViewModel.TvShowsEvent.Empty -> {
                     showProgressBar()
                     showToast("Movies is Empty!")
-                }
-            }
-        })
-        with(fragmentTvShowsBinding.rvTvShows) {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = tvShowsAdapter
-        }
-        tvShowsAdapter.setOnItemClickListener( object : DataAdapter.OnItemClickListener {
-            override fun onClick(data: DataEntity) {
-                Intent(activity, DetailActivity::class.java).also {
-                    it.putExtra(DetailActivity.EXTRA_DATA, data)
-                    startActivity(it)
                 }
             }
         })

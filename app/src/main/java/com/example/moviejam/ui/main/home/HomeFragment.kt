@@ -1,4 +1,4 @@
-package com.example.moviejam.ui.home
+package com.example.moviejam.ui.main.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,15 +12,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviejam.adapter.DataAdapter
 import com.example.moviejam.adapter.TopAdapter
-import com.example.moviejam.data.DataEntity
+import com.example.moviejam.data.model.DataEntity
 import com.example.moviejam.databinding.FragmentHomeBinding
 import com.example.moviejam.repository.DummyDataRepository
 import com.example.moviejam.ui.detail.DetailActivity
+import com.example.moviejam.utils.ViewModelFactory
 
 class HomeFragment : Fragment() {
 
     private lateinit var fragmentHomeBinding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var topMoviesAdapter: TopAdapter
+    private lateinit var popularMoviesAdapter: DataAdapter
+    private lateinit var popularTvShowsAdapter: DataAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,16 +38,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize Adapter and View Model
-        val repository = DummyDataRepository()
-        val topMoviesAdapter = TopAdapter()
-        homeViewModel = ViewModelProvider(
-            this,
-            HomeViewModelFactory(repository)
-        )[HomeViewModel::class.java]
-        homeViewModel.setTopMovies(activity?.applicationContext)
+        setupViewModel()
+        setupTopMoviesContent()
+        setupPopularMoviesContent()
+        setupPopularTvShowsContent()
+    }
 
-        // Get data from view model=
+    private fun setupTopMoviesContent() {
+        topMoviesAdapter = TopAdapter()
         homeViewModel.listTopMovies.observe(viewLifecycleOwner, { event ->
             when (event) {
                 is HomeViewModel.MoviesEvent.Success -> {
@@ -54,12 +56,10 @@ class HomeFragment : Fragment() {
                     hideProgressBarTopMovies()
                     showToast(event.message)
                 }
-                is HomeViewModel.MoviesEvent.Loading -> {
+                is HomeViewModel.MoviesEvent.Loading ->
                     showProgressBarTopMovies()
-                }
-                is HomeViewModel.MoviesEvent.Empty -> {
+                is HomeViewModel.MoviesEvent.Empty ->
                     showToast("Top Movies is Empty!")
-                }
             }
         })
         with(fragmentHomeBinding.rvTop) {
@@ -75,10 +75,10 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+    }
 
-        // Set Popular Movies Content
-        val popularMoviesAdapter = DataAdapter()
-        homeViewModel.setPopularMovies(activity?.applicationContext)
+    private fun setupPopularMoviesContent() {
+        popularMoviesAdapter = DataAdapter()
         homeViewModel.listPopularMovies.observe(viewLifecycleOwner, { event ->
             when (event) {
                 is HomeViewModel.MoviesEvent.Success -> {
@@ -89,12 +89,10 @@ class HomeFragment : Fragment() {
                     hideProgressBarPopularMovies()
                     showToast(event.message)
                 }
-                is HomeViewModel.MoviesEvent.Loading -> {
+                is HomeViewModel.MoviesEvent.Loading ->
                     showProgressBarPopularMovies()
-                }
-                is HomeViewModel.MoviesEvent.Empty -> {
+                is HomeViewModel.MoviesEvent.Empty ->
                     showToast("Popular Movies is Empty!")
-                }
             }
         })
         with(fragmentHomeBinding.rvPopularMovies) {
@@ -110,10 +108,10 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+    }
 
-        // Set Popular TV Shows Content
-        val popularTvShowsAdapter = DataAdapter()
-        homeViewModel.setPopularTvShows(context?.applicationContext)
+    private fun setupPopularTvShowsContent() {
+        popularTvShowsAdapter = DataAdapter()
         homeViewModel.listPopularTvShows.observe(viewLifecycleOwner, { event ->
             when (event) {
                 is HomeViewModel.TvShowsEvent.Success -> {
@@ -124,12 +122,10 @@ class HomeFragment : Fragment() {
                     hideProgressBarPopularTvShows()
                     showToast(event.message)
                 }
-                is HomeViewModel.TvShowsEvent.Loading -> {
+                is HomeViewModel.TvShowsEvent.Loading ->
                     showProgressBarPopularTvShows()
-                }
-                is HomeViewModel.TvShowsEvent.Empty -> {
+                is HomeViewModel.TvShowsEvent.Empty ->
                     showToast("Popular TV Shows is Empty!")
-                }
             }
         })
         with(fragmentHomeBinding.rvPopularTvShows) {
@@ -145,6 +141,15 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun setupViewModel() {
+        homeViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(
+                repository = DummyDataRepository(context)
+            )
+        )[HomeViewModel::class.java]
     }
 
     private fun showProgressBarTopMovies() {
