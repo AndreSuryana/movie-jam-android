@@ -8,7 +8,5 @@ interface MainRepository {
     suspend fun getPopularMovies(): List<DataEntity>
     suspend fun getPopularTvShows(): List<DataEntity>
     suspend fun getMovies(): List<DataEntity>
-    suspend fun getMovieById(id: Int): DataEntity
     suspend fun getTvShows(): List<DataEntity>
-    suspend fun getTvShowById(id: Int): DataEntity
 }

@@ -6,34 +6,32 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviejam.data.model.DataEntity
 import com.example.moviejam.repository.MainRepository
+import com.example.moviejam.utils.Event
+import com.example.moviejam.utils.Resource
+import com.example.moviejam.utils.Status
 import kotlinx.coroutines.launch
 
 class TvShowsViewModel(
     private val repository: MainRepository?
 ) : ViewModel() {
 
-    sealed class TvShowsEvent {
-        class Success(val tvShows: List<DataEntity>) : TvShowsEvent()
-        class Failure(val message: String) : TvShowsEvent()
-        object Loading : TvShowsEvent()
-        object Empty : TvShowsEvent()
-    }
-
-    private val _listTvShows = MutableLiveData<TvShowsEvent>(TvShowsEvent.Empty)
-    val listTvShows: LiveData<TvShowsEvent> = _listTvShows
+    private val _listTvShows = MutableLiveData<Event<Resource<List<DataEntity>>>>()
+    val listTvShows: LiveData<Event<Resource<List<DataEntity>>>> = _listTvShows
 
     init {
-        setTvShows()
+        viewModelScope.launch {
+            val tvShows = repository?.getTvShows()
+            setTvShows(tvShows)
+        }
     }
 
-    private fun setTvShows() {
+    fun setTvShows(tvShows: List<DataEntity>?) {
         viewModelScope.launch {
-            _listTvShows.value = TvShowsEvent.Loading
-            val tvShows = repository?.getTvShows()
+            _listTvShows.value = Event(Resource(Status.LOADING, null, null))
             if (tvShows?.isNotEmpty() == true)
-                _listTvShows.value = TvShowsEvent.Success(tvShows)
+                _listTvShows.value = Event(Resource(Status.SUCCESS, tvShows, null))
             else
-                _listTvShows.value = TvShowsEvent.Failure("An error has been occurred!")
+                _listTvShows.value = Event(Resource(Status.ERROR, null, null))
         }
     }
 }

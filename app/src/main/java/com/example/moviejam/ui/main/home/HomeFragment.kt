@@ -16,6 +16,7 @@ import com.example.moviejam.data.model.DataEntity
 import com.example.moviejam.databinding.FragmentHomeBinding
 import com.example.moviejam.repository.DummyDataRepository
 import com.example.moviejam.ui.detail.DetailActivity
+import com.example.moviejam.utils.Status
 import com.example.moviejam.utils.ViewModelFactory
 
 class HomeFragment : Fragment() {
@@ -47,19 +48,20 @@ class HomeFragment : Fragment() {
     private fun setupTopMoviesContent() {
         topMoviesAdapter = TopAdapter()
         homeViewModel.listTopMovies.observe(viewLifecycleOwner, { event ->
-            when (event) {
-                is HomeViewModel.MoviesEvent.Success -> {
-                    hideProgressBarTopMovies()
-                    topMoviesAdapter.setListTopMovies(event.movies)
+            event.getDataIfNotHandledYet()?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBarTopMovies()
+                        resource.data?.let { topMoviesAdapter.setListTopMovies(it) }
+                    }
+                    Status.ERROR -> {
+                        hideProgressBarTopMovies()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> {
+                        showProgressBarTopMovies()
+                    }
                 }
-                is HomeViewModel.MoviesEvent.Failure -> {
-                    hideProgressBarTopMovies()
-                    showToast(event.message)
-                }
-                is HomeViewModel.MoviesEvent.Loading ->
-                    showProgressBarTopMovies()
-                is HomeViewModel.MoviesEvent.Empty ->
-                    showToast("Top Movies is Empty!")
             }
         })
         with(fragmentHomeBinding.rvTop) {
@@ -80,19 +82,20 @@ class HomeFragment : Fragment() {
     private fun setupPopularMoviesContent() {
         popularMoviesAdapter = DataAdapter()
         homeViewModel.listPopularMovies.observe(viewLifecycleOwner, { event ->
-            when (event) {
-                is HomeViewModel.MoviesEvent.Success -> {
-                    hideProgressBarPopularMovies()
-                    popularMoviesAdapter.setList(event.movies)
+            event.getDataIfNotHandledYet()?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBarPopularMovies()
+                        resource.data?.let { popularMoviesAdapter.setList(it) }
+                    }
+                    Status.ERROR -> {
+                        hideProgressBarPopularMovies()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> {
+                        showProgressBarPopularMovies()
+                    }
                 }
-                is HomeViewModel.MoviesEvent.Failure -> {
-                    hideProgressBarPopularMovies()
-                    showToast(event.message)
-                }
-                is HomeViewModel.MoviesEvent.Loading ->
-                    showProgressBarPopularMovies()
-                is HomeViewModel.MoviesEvent.Empty ->
-                    showToast("Popular Movies is Empty!")
             }
         })
         with(fragmentHomeBinding.rvPopularMovies) {
@@ -113,19 +116,20 @@ class HomeFragment : Fragment() {
     private fun setupPopularTvShowsContent() {
         popularTvShowsAdapter = DataAdapter()
         homeViewModel.listPopularTvShows.observe(viewLifecycleOwner, { event ->
-            when (event) {
-                is HomeViewModel.TvShowsEvent.Success -> {
-                    hideProgressBarPopularTvShows()
-                    popularTvShowsAdapter.setList(event.tvShows)
+            event.getDataIfNotHandledYet()?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBarPopularTvShows()
+                        resource.data?.let { popularTvShowsAdapter.setList(it) }
+                    }
+                    Status.ERROR -> {
+                        hideProgressBarPopularTvShows()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> {
+                        showProgressBarPopularTvShows()
+                    }
                 }
-                is HomeViewModel.TvShowsEvent.Failure -> {
-                    hideProgressBarPopularTvShows()
-                    showToast(event.message)
-                }
-                is HomeViewModel.TvShowsEvent.Loading ->
-                    showProgressBarPopularTvShows()
-                is HomeViewModel.TvShowsEvent.Empty ->
-                    showToast("Popular TV Shows is Empty!")
             }
         })
         with(fragmentHomeBinding.rvPopularTvShows) {

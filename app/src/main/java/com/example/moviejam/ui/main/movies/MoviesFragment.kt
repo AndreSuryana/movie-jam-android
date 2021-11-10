@@ -15,6 +15,7 @@ import com.example.moviejam.data.model.DataEntity
 import com.example.moviejam.databinding.FragmentMoviesBinding
 import com.example.moviejam.repository.DummyDataRepository
 import com.example.moviejam.ui.detail.DetailActivity
+import com.example.moviejam.utils.Status
 import com.example.moviejam.utils.ViewModelFactory
 
 class MoviesFragment : Fragment() {
@@ -66,21 +67,19 @@ class MoviesFragment : Fragment() {
 
     private fun setupObserver() {
         moviesViewModel.listMovies.observe(viewLifecycleOwner, { event ->
-            when (event) {
-                is MoviesViewModel.MoviesEvent.Success -> {
-                    hideProgressBar()
-                    moviesAdapter.setList(event.movies)
-                }
-                is MoviesViewModel.MoviesEvent.Failure -> {
-                    hideProgressBar()
-                    showToast(event.message)
-                }
-                is MoviesViewModel.MoviesEvent.Loading -> {
-                    showProgressBar()
-                }
-                is MoviesViewModel.MoviesEvent.Empty -> {
-                    showProgressBar()
-                    showToast("Movies is Empty!")
+            event.getDataIfNotHandledYet()?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBar()
+                        resource.data?.let {  moviesAdapter.setList(it) }
+                    }
+                    Status.ERROR -> {
+                        hideProgressBar()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> {
+                        showProgressBar()
+                    }
                 }
             }
         })

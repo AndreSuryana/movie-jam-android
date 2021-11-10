@@ -2,6 +2,7 @@ package com.example.moviejam.ui.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -9,15 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviejam.R
-import com.example.moviejam.data.local.DatabaseBuilder
-import com.example.moviejam.data.local.DatabaseHelperImpl
 import com.example.moviejam.data.model.DataEntity
 import com.example.moviejam.databinding.ActivityDetailBinding
 import com.example.moviejam.dispatchers.DispatcherProvider
 import com.example.moviejam.dispatchers.MainDispatcher
-import com.example.moviejam.utils.ViewModelFactory
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DetailActivity : AppCompatActivity() {
 
@@ -40,17 +37,9 @@ class DetailActivity : AppCompatActivity() {
         lifecycleScope.launch(dispatcher.main) {
             activityDetailBinding.apply {
                 // For BG Images
-                Glide.with(this@DetailActivity)
-                    .load(data.poster)
-                    .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
-                    .error(R.drawable.placeholder)
-                    .into(ivPosterBg)
+                ivPosterBg.loadImage(data.poster)
                 // For Main Images
-                Glide.with(this@DetailActivity)
-                    .load(data.poster)
-                    .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
-                    .error(R.drawable.placeholder)
-                    .into(ivPoster)
+                ivPoster.loadImage(data.poster)
                 tvToolbarTitle.text = data.title
                 tvTitle.text = data.title
                 tvRating.text = data.rating
@@ -64,42 +53,20 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-        // Setup Favorite Feature
-        var checked = false
-        lifecycleScope.launch(dispatcher.io) {
-            val count = detailViewModel.checkFavoriteItem(data.title)
-            withContext(dispatcher.main) {
-                if (count != null && count > 0) {
-                    activityDetailBinding.toggleFavorite.isChecked = true
-                    checked = true
-                } else {
-                    activityDetailBinding.toggleFavorite.isChecked = false
-                    checked = false
-                }
-            }
-        }
-
-        activityDetailBinding.toggleFavorite.setOnClickListener {
-            checked = !checked
-            lifecycleScope.launch(dispatcher.io) {
-                if (checked) detailViewModel.addToFavorite(data)
-                else detailViewModel.deleteFavoriteItem(data.title)
-            }
-        }
-
         // Back button
         activityDetailBinding.btnBack.setOnClickListener { onBackClicked() }
     }
 
+    private fun ImageView.loadImage(url: String?) {
+        Glide.with(this.context)
+            .load(url)
+            .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
+            .error(R.drawable.placeholder)
+            .into(this)
+    }
+
     private fun setupViewModel() {
-        detailViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(
-                database = DatabaseBuilder.getInstance(this)?.let {
-                    DatabaseHelperImpl(it)
-                }
-            )
-        )[DetailViewModel::class.java]
+        detailViewModel = ViewModelProvider(this)[DetailViewModel::class.java]
     }
 
     private fun setupObserver() {

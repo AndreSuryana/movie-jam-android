@@ -18,12 +18,6 @@ class DummyDataRepository(private val context: Context?) : MainRepository {
     override suspend fun getMovies(): List<DataEntity> =
         DummyData.generateDummyMovies(context?.applicationContext)
 
-    override suspend fun getMovieById(id: Int): DataEntity =
-        DummyData.getDummyMovieById(context?.applicationContext, id)
-
     override suspend fun getTvShows(): List<DataEntity> =
         DummyData.generateDummyTvShows(context?.applicationContext)
-
-    override suspend fun getTvShowById(id: Int): DataEntity =
-        DummyData.getDummyTvShowById(context?.applicationContext, id)
 }

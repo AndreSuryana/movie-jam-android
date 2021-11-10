@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_tv_shows"
-        android:icon="@drawable/ic_tv_shows"
-        android:title="@string/title_tv_shows" />
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/title_home" />
 
     <item
         android:id="@+id/navigation_movies"
@@ -12,14 +12,9 @@
         android:title="@string/title_movies" />
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home"
-        android:title="@string/title_home" />
-
-    <item
-        android:id="@+id/navigation_favorite"
-        android:icon="@drawable/ic_favorite"
-        android:title="@string/title_favorite" />
+        android:id="@+id/navigation_tv_shows"
+        android:icon="@drawable/ic_tv_shows"
+        android:title="@string/title_tv_shows" />
 
     <item
         android:id="@+id/navigation_notifications"

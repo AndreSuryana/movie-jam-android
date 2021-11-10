@@ -1,6 +1,7 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.MovieJam" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
         <item name="android:colorPrimaryDark">@color/black</item>
         <item name="android:colorPrimary">@color/black</item>
         <item name="android:textColorPrimary">@color/white</item>
@@ -10,6 +11,16 @@
     </style>
 
     <!-- Custom Styling -->
+    <style name="BottomNavigationView" parent="Theme.AppCompat.Light">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
+        <item name="android:background">?android:attr/windowBackground</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:colorForeground">@color/white</item>
+    </style>
+
     <style name="ShapeAppearanceOverlay.App.CornerSize10Dp" parent="">
         <item name="cornerSize">10dp</item>
     </style>
@@ -18,7 +29,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/white</item>
     </style>
@@ -37,8 +48,6 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-
-    <!-- Card View List Styling -->
 
     <!-- Home Fragment Styling -->
     <style name="HomeProfileImages">
@@ -87,5 +96,36 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">32dp</item>
         <item name="android:layout_marginEnd">32dp</item>
+    </style>
+
+    <style name="ProfileTextContent">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Detail Activity Styling -->
+    <style name="DetailContentTitle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DetailTextContent">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="DetailRatingText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>

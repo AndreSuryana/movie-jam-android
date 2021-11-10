@@ -2,6 +2,7 @@ package com.example.moviejam.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -45,11 +46,7 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.MoviesViewHolder>() {
         fun bind(data: DataEntity) {
             with(binding) {
                 // Set item content
-                Glide.with(itemView.context)
-                    .load(data.poster)
-                    .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
-                    .error(R.drawable.placeholder)
-                    .into(ivPoster)
+                ivPoster.loadImage(data.poster)
                 tvTitle.text = data.title
                 tvRating.text = data.rating
                 tvDate.text = data.date
@@ -57,6 +54,14 @@ class DataAdapter : RecyclerView.Adapter<DataAdapter.MoviesViewHolder>() {
                 tvGenre.text = data.genre
             }
         }
+    }
+
+    private fun ImageView.loadImage(url: String?) {
+        Glide.with(this.context)
+            .load(url)
+            .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
+            .error(R.drawable.placeholder)
+            .into(this)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

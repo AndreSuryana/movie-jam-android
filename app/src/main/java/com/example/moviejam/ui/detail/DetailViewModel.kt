@@ -2,14 +2,8 @@ package com.example.moviejam.ui.detail
 
 import androidx.lifecycle.*
 import com.example.moviejam.data.model.DataEntity
-import com.example.moviejam.data.local.DatabaseHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-class DetailViewModel constructor(
-    private val database: DatabaseHelper?
-) : ViewModel() {
+class DetailViewModel : ViewModel() {
 
     sealed class DataEvent {
         class Success(val data: DataEntity) : DataEvent()
@@ -27,19 +21,5 @@ class DetailViewModel constructor(
             _dataDetail.value = DataEvent.Success(data)
         else
             _dataDetail.value = DataEvent.Failure("An error has been occurred!")
-    }
-
-    suspend fun addToFavorite(data: DataEntity) {
-        CoroutineScope(Dispatchers.IO).launch {
-            database?.addToFavorite(data)
-        }
-    }
-
-    suspend fun checkFavoriteItem(title: String) = database?.checkFavoriteItem(title)
-
-    fun deleteFavoriteItem(title: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            database?.deleteFavoriteItem(title)
-        }
     }
 }

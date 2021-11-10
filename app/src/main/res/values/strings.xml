@@ -23,4 +23,8 @@
     <string name="language_label">Language</string>
     <string name="creator_label">Creator</string>
     <string name="overview_label">Overview</string>
+    <string name="profile_name">Profile Name</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="profile_id">12345678</string>
+    <string name="profile_email">Email@email.com</string>
 </resources>
