@@ -2,6 +2,7 @@
     <string name="app_name">Movie Jam</string>
     <string name="profile_images">Profile Images</string>
     <string name="greetings_text">Hello, Username</string>
+    <string name="dummy_greetings_text">Hello, Kadek Andre Suryana</string>
     <string name="suggestion_text">Watch your favorite movies or tv shows now!</string>
     <string name="poster_images">Poster Images</string>
     <string name="title">Title</string>
@@ -25,6 +26,5 @@
     <string name="overview_label">Overview</string>
     <string name="profile_name">Profile Name</string>
     <string name="profile_picture">Profile Picture</string>
-    <string name="profile_id">12345678</string>
     <string name="profile_email">Email@email.com</string>
 </resources>

@@ -81,7 +81,7 @@ class HomeViewModelTest {
         // Set movie list in fake repository to empty list
         fakeRepository.setTopMoviesList(emptyList())
 
-        // Set value of listMovies in View Model
+        // Set value of listTopMovies in View Model
         mainCoroutineScope.launch {
             homeViewModel.setTopMovies(fakeRepository.getTopMovies())
         }
@@ -97,13 +97,30 @@ class HomeViewModelTest {
         // Set movie list in fake repository to empty list
         fakeRepository.setTopMoviesList(listOf(data1, data2, data3))
 
-        // Set value of listMovies in View Model
+        // Set value of listTopMovies in View Model
         mainCoroutineScope.launch {
             homeViewModel.setTopMovies(fakeRepository.getTopMovies())
         }
 
         val value = homeViewModel.listTopMovies.getOrAwaitListTest()
         assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.SUCCESS)
+    }
+
+    @Test
+    fun `ensure the number of top movie list as expected`() {
+
+        // Set movie list in fake repository
+        // Which has 3 data
+        fakeRepository.setTopMoviesList(listOf(data1, data2, data3))
+
+        // Set value of listTopMovies in ViewModel
+        mainCoroutineScope.launch {
+            homeViewModel.setTopMovies(fakeRepository.getTopMovies())
+        }
+
+        val size = homeViewModel.listTopMovies.getOrAwaitListTest().getDataIfNotHandledYet()?.data?.size
+
+        assertThat(size).isEqualTo(3)
     }
 
     /**
@@ -140,6 +157,22 @@ class HomeViewModelTest {
         assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.SUCCESS)
     }
 
+    @Test
+    fun `ensure the number of popular movie list as expected`() {
+
+        // Set movie list in fake repository
+        // Which has 3 data
+        fakeRepository.setPopularMoviesList(listOf(data1, data2, data3))
+
+        // Set value of listPopularMovies in ViewModel
+        mainCoroutineScope.launch {
+            homeViewModel.setPopularMovies(fakeRepository.getPopularMovies())
+        }
+
+        val size = homeViewModel.listPopularMovies.getOrAwaitListTest().getDataIfNotHandledYet()?.data?.size
+
+        assertThat(size).isEqualTo(3)
+    }
 
     /**
      * Test for Popular TV SHow List in Home View Model
@@ -173,5 +206,22 @@ class HomeViewModelTest {
 
         val value = homeViewModel.listPopularTvShows.getOrAwaitListTest()
         assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.SUCCESS)
+    }
+
+    @Test
+    fun `ensure the number of popular tv show list as expected`() {
+
+        // Set movie list in fake repository
+        // Which has 3 data
+        fakeRepository.setPopularTvShowsList(listOf(data1, data2, data3))
+
+        // Set value of listPopularTvShow in ViewModel
+        mainCoroutineScope.launch {
+            homeViewModel.setPopularTvShows(fakeRepository.getPopularTvShows())
+        }
+
+        val size = homeViewModel.listPopularTvShows.getOrAwaitListTest().getDataIfNotHandledYet()?.data?.size
+
+        assertThat(size).isEqualTo(3)
     }
 }

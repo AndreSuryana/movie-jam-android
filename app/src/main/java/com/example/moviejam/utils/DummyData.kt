@@ -81,32 +81,4 @@ object DummyData {
         }
         return popularTvShows
     }
-
-    fun getDummyMovieById(context: Context?, id: Int): DataEntity {
-
-        val listMovies: List<DataEntity> = generateDummyMovies(context?.applicationContext)
-        lateinit var movie: DataEntity
-
-        listMovies.forEach {
-            if (it.id == id) {
-                movie = it
-                return@forEach
-            }
-        }
-        return movie
-    }
-
-    fun getDummyTvShowById(context: Context?, id: Int): DataEntity {
-
-        val listTvShows: List<DataEntity> = generateDummyTvShows(context?.applicationContext)
-        lateinit var tvShow: DataEntity
-
-        listTvShows.forEach {
-            if (it.id == id) {
-                tvShow = it
-                return@forEach
-            }
-        }
-        return tvShow
-    }
 }

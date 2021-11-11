@@ -15,6 +15,7 @@ import com.example.moviejam.R
 import com.example.moviejam.data.model.Profile
 import com.example.moviejam.databinding.FragmentProfileBinding
 import com.example.moviejam.utils.Status
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
@@ -33,13 +34,8 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUI()
         setupViewModel()
         setupObserver()
-    }
-
-    private fun setupUI() {
-
     }
 
     private fun setupViewModel() {
@@ -72,14 +68,16 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setContent(profile: Profile) {
-        fragmentProfileBinding.apply {
-            Glide.with(this@ProfileFragment)
-                .load(profile.picture)
-                .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
-                .error(R.drawable.placeholder)
-                .into(ivProfilePicture)
-            tvProfileName.text = profile.name
-            tvProfileEmail.text = profile.email
+        lifecycleScope.launch(Dispatchers.Main) {
+            fragmentProfileBinding.apply {
+                Glide.with(this@ProfileFragment)
+                    .load(profile.picture)
+                    .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
+                    .error(R.drawable.placeholder)
+                    .into(ivProfilePicture)
+                tvProfileName.text = profile.name
+                tvProfileEmail.text = profile.email
+            }
         }
     }
 

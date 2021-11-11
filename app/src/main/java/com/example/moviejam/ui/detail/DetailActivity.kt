@@ -12,17 +12,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.moviejam.R
 import com.example.moviejam.data.model.DataEntity
 import com.example.moviejam.databinding.ActivityDetailBinding
-import com.example.moviejam.dispatchers.DispatcherProvider
-import com.example.moviejam.dispatchers.MainDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var activityDetailBinding: ActivityDetailBinding
     private lateinit var detailViewModel: DetailViewModel
-    private val dispatcher: DispatcherProvider by lazy {
-        MainDispatcher()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +30,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setupUI(data: DataEntity) {
-        lifecycleScope.launch(dispatcher.main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             activityDetailBinding.apply {
                 // For BG Images
                 ivPosterBg.loadImage(data.poster)
@@ -70,30 +66,33 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setupObserver() {
-        // Getting the data
-        val dataReceived = intent.getParcelableExtra<DataEntity>(EXTRA_DATA)
 
         // Setup Detail Data
-        detailViewModel.setData(dataReceived)
-        detailViewModel.dataDetail.observe(this@DetailActivity, { event ->
-            when (event) {
-                is DetailViewModel.DataEvent.Success -> {
-                    hideProgressBar()
-                    setupUI(event.data)
+        lifecycleScope.launch {
+            // Getting the data
+            val dataReceived = intent.getParcelableExtra<DataEntity>(EXTRA_DATA)
+
+            detailViewModel.setData(dataReceived)
+            detailViewModel.dataDetail.observe(this@DetailActivity, { event ->
+                when (event) {
+                    is DetailViewModel.DataEvent.Success -> {
+                        hideProgressBar()
+                        setupUI(event.data)
+                    }
+                    is DetailViewModel.DataEvent.Failure -> {
+                        showProgressBar()
+                        showToast(event.message)
+                    }
+                    is DetailViewModel.DataEvent.Loading -> {
+                        showProgressBar()
+                    }
+                    is DetailViewModel.DataEvent.Empty -> {
+                        hideProgressBar()
+                        showToast("Error! No data was loaded!")
+                    }
                 }
-                is DetailViewModel.DataEvent.Failure -> {
-                    showProgressBar()
-                    showToast(event.message)
-                }
-                is DetailViewModel.DataEvent.Loading -> {
-                    showProgressBar()
-                }
-                is DetailViewModel.DataEvent.Empty -> {
-                    hideProgressBar()
-                    showToast("Error! No data was loaded!")
-                }
-            }
-        })
+            })
+        }
     }
 
     private fun onBackClicked() {

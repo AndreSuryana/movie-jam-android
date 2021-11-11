@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviejam.adapter.DataAdapter
 import com.example.moviejam.data.model.DataEntity
@@ -17,6 +18,8 @@ import com.example.moviejam.repository.DummyDataRepository
 import com.example.moviejam.ui.detail.DetailActivity
 import com.example.moviejam.utils.Status
 import com.example.moviejam.utils.ViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TvShowsFragment : Fragment() {
 
@@ -36,26 +39,29 @@ class TvShowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        tvShowsAdapter = DataAdapter()
+
         setupUI()
         setupViewModel()
         setupObserver()
     }
 
     private fun setupUI() {
-        tvShowsAdapter = DataAdapter()
-        with(fragmentTvShowsBinding.rvTvShows) {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = tvShowsAdapter
-        }
-        tvShowsAdapter.setOnItemClickListener(object : DataAdapter.OnItemClickListener {
-            override fun onClick(data: DataEntity) {
-                Intent(activity, DetailActivity::class.java).also {
-                    it.putExtra(DetailActivity.EXTRA_DATA, data)
-                    startActivity(it)
-                }
+        lifecycleScope.launch(Dispatchers.Main) {
+            with(fragmentTvShowsBinding.rvTvShows) {
+                layoutManager = LinearLayoutManager(context)
+                setHasFixedSize(true)
+                adapter = tvShowsAdapter
             }
-        })
+            tvShowsAdapter.setOnItemClickListener(object : DataAdapter.OnItemClickListener {
+                override fun onClick(data: DataEntity) {
+                    Intent(activity, DetailActivity::class.java).also {
+                        it.putExtra(DetailActivity.EXTRA_DATA, data)
+                        startActivity(it)
+                    }
+                }
+            })
+        }
     }
 
     private fun setupViewModel() {
@@ -66,23 +72,25 @@ class TvShowsFragment : Fragment() {
     }
 
     private fun setupObserver() {
-        tvShowsViewModel.listTvShows.observe(viewLifecycleOwner, { event ->
-            event.getDataIfNotHandledYet()?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        hideProgressBar()
-                        resource.data?.let { tvShowsAdapter.setList(it) }
-                    }
-                    Status.ERROR -> {
-                        hideProgressBar()
-                        showToast(resource.message.toString())
-                    }
-                    Status.LOADING -> {
-                        showProgressBar()
+        lifecycleScope.launch {
+            tvShowsViewModel.listTvShows.observe(viewLifecycleOwner, { event ->
+                event.getDataIfNotHandledYet()?.let { resource ->
+                    when (resource.status) {
+                        Status.SUCCESS -> {
+                            hideProgressBar()
+                            resource.data?.let { tvShowsAdapter.setList(it) }
+                        }
+                        Status.ERROR -> {
+                            hideProgressBar()
+                            showToast(resource.message.toString())
+                        }
+                        Status.LOADING -> {
+                            showProgressBar()
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
     }
 
     private fun showProgressBar() {

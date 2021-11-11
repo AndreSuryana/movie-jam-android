@@ -103,4 +103,21 @@ class MoviesViewModelTest {
         val value = moviesViewModel.listMovies.getOrAwaitListTest()
         assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.SUCCESS)
     }
+
+    @Test
+    fun `ensure the number of movie list as expected`() {
+
+        // Set movie list in fake repository
+        // Which has 3 data
+        fakeRepository.setMoviesList(listOf(data1, data2, data3))
+
+        // Set value of listMovies in ViewModel
+        mainCoroutineScope.launch {
+            moviesViewModel.setMovies(fakeRepository.getMovies())
+        }
+
+        val size = moviesViewModel.listMovies.getOrAwaitListTest().getDataIfNotHandledYet()?.data?.size
+
+        assertThat(size).isEqualTo(3)
+    }
 }

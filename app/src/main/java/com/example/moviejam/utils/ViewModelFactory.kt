@@ -11,8 +11,7 @@ import java.lang.IllegalArgumentException
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
-    private val repository: MainRepository? = null,
-    private val dispatcher: DispatcherProvider? = null
+    private val repository: MainRepository? = null
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

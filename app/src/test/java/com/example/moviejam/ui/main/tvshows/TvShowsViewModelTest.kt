@@ -102,4 +102,21 @@ class TvShowsViewModelTest {
         val value = tvSHowsViewModel.listTvShows.getOrAwaitListTest()
         assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.SUCCESS)
     }
+
+    @Test
+    fun `ensure the number of movie list as expected`() {
+
+        // Set movie list in fake repository
+        // Which has 3 data
+        fakeRepository.setTvShowsList(listOf(data1, data2, data3))
+
+        // Set value of listMovies in ViewModel
+        mainCoroutineScope.launch {
+            tvSHowsViewModel.setTvShows(fakeRepository.getTvShows())
+        }
+
+        val size = tvSHowsViewModel.listTvShows.getOrAwaitListTest().getDataIfNotHandledYet()?.data?.size
+
+        assertThat(size).isEqualTo(3)
+    }
 }
