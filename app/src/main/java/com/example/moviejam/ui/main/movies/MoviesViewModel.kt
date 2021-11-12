@@ -1,6 +1,5 @@
 package com.example.moviejam.ui.main.movies
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,18 +18,15 @@ class MoviesViewModel(
     private val _listMovies = MutableLiveData<Event<Resource<List<DataEntity>>>>()
     val listMovies: LiveData<Event<Resource<List<DataEntity>>>> = _listMovies
 
-    init {
+    fun setMovies() {
         viewModelScope.launch {
-            val movies = repository?.getMovies()
-            setMovies(movies)
-        }
-    }
+            val movies: List<DataEntity>? = repository?.getMovies()
 
-    fun setMovies(movies: List<DataEntity>?) {
-        _listMovies.value = Event(Resource(Status.LOADING, null, null))
-        if (movies?.isNotEmpty() == true)
-            _listMovies.value = Event(Resource(Status.SUCCESS, movies, null))
-        else
-            _listMovies.value = Event(Resource(Status.ERROR, null, "Movies List is Empty!"))
+            _listMovies.value = Event(Resource(Status.LOADING, null, null))
+            if (movies?.isNotEmpty() == true)
+                _listMovies.value = Event(Resource(Status.SUCCESS, movies, null))
+            else
+                _listMovies.value = Event(Resource(Status.ERROR, null, "Movies List is Empty!"))
+        }
     }
 }

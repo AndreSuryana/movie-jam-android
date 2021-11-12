@@ -24,42 +24,44 @@ class HomeViewModel(
     private val _listPopularTvShows = MutableLiveData<Event<Resource<List<DataEntity>>>>()
     val listPopularTvShows: LiveData<Event<Resource<List<DataEntity>>>> = _listPopularTvShows
 
-    init {
+    fun setTopMovies() {
         viewModelScope.launch {
-            val topMovies = repository?.getTopMovies()
-            val popularMovies = repository?.getPopularMovies()
-            val popularTvShows = repository?.getPopularTvShows()
-            setTopMovies(topMovies)
-            setPopularMovies(popularMovies)
-            setPopularTvShows(popularTvShows)
+            val topMovies: List<DataEntity>? = repository?.getTopMovies()
+
+            _listTopMovies.value = Event(Resource(Status.LOADING, null, null))
+            if (topMovies?.isNotEmpty() == true)
+                _listTopMovies.value = Event(Resource(Status.SUCCESS, topMovies, null))
+            else
+                _listTopMovies.value =
+                    Event(Resource(Status.ERROR, null, "Top Movie List is Empty!"))
+        }
+
+    }
+
+    fun setPopularMovies() {
+        viewModelScope.launch {
+            val popularMovies: List<DataEntity>? = repository?.getPopularMovies()
+
+            _listPopularMovies.value = Event(Resource(Status.LOADING, null, null))
+            if (popularMovies?.isNotEmpty() == true)
+                _listPopularMovies.value = Event(Resource(Status.SUCCESS, popularMovies, null))
+            else
+                _listPopularMovies.value =
+                    Event(Resource(Status.ERROR, null, "Popular Movie List is Empty!"))
         }
     }
 
-    fun setTopMovies(topMovies: List<DataEntity>?) {
-        _listTopMovies.value = Event(Resource(Status.LOADING, null, null))
-        if (topMovies?.isNotEmpty() == true)
-            _listTopMovies.value = Event(Resource(Status.SUCCESS, topMovies, null))
-        else
-            _listTopMovies.value = Event(Resource(Status.ERROR, null, "Top Movie List is Empty!"))
+    fun setPopularTvShows() {
+        viewModelScope.launch {
+            val popularTvShows: List<DataEntity>? = repository?.getPopularTvShows()
 
-    }
-
-    fun setPopularMovies(popularMovies: List<DataEntity>?) {
-        _listPopularMovies.value = Event(Resource(Status.LOADING, null, null))
-        if (popularMovies?.isNotEmpty() == true)
-            _listPopularMovies.value = Event(Resource(Status.SUCCESS, popularMovies, null))
-        else
-            _listPopularMovies.value = Event(Resource(Status.ERROR, null, "Popular Movie List is Empty!"))
-
-    }
-
-    fun setPopularTvShows(popularTvShows: List<DataEntity>?) {
-        _listPopularTvShows.value = Event(Resource(Status.LOADING, null, null))
-        if (popularTvShows?.isNotEmpty() == true)
-            _listPopularTvShows.value = Event(Resource(Status.SUCCESS, popularTvShows, null))
-        else
-            _listPopularTvShows.value = Event(Resource(Status.ERROR, null, "Popular TV Show List is Empty!"))
-
+            _listPopularTvShows.value = Event(Resource(Status.LOADING, null, null))
+            if (popularTvShows?.isNotEmpty() == true)
+                _listPopularTvShows.value = Event(Resource(Status.SUCCESS, popularTvShows, null))
+            else
+                _listPopularTvShows.value =
+                    Event(Resource(Status.ERROR, null, "Popular TV Show List is Empty!"))
+        }
     }
 
 }

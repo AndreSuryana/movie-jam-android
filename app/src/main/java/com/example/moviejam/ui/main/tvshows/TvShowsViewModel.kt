@@ -18,20 +18,15 @@ class TvShowsViewModel(
     private val _listTvShows = MutableLiveData<Event<Resource<List<DataEntity>>>>()
     val listTvShows: LiveData<Event<Resource<List<DataEntity>>>> = _listTvShows
 
-    init {
+    fun setTvShows() {
         viewModelScope.launch {
-            val tvShows = repository?.getTvShows()
-            setTvShows(tvShows)
-        }
-    }
+            val tvShows: List<DataEntity>? = repository?.getTvShows()
 
-    fun setTvShows(tvShows: List<DataEntity>?) {
-        viewModelScope.launch {
             _listTvShows.value = Event(Resource(Status.LOADING, null, null))
             if (tvShows?.isNotEmpty() == true)
                 _listTvShows.value = Event(Resource(Status.SUCCESS, tvShows, null))
             else
-                _listTvShows.value = Event(Resource(Status.ERROR, null, null))
+                _listTvShows.value = Event(Resource(Status.ERROR, null, "TV Shows is Empty!"))
         }
     }
 }

@@ -20,15 +20,15 @@ import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
 
-    private lateinit var fragmentProfileBinding: FragmentProfileBinding
+    private var fragmentProfileBinding: FragmentProfileBinding? = null
     private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         fragmentProfileBinding = FragmentProfileBinding.inflate(inflater, container, false)
-        return fragmentProfileBinding.root
+        return fragmentProfileBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,6 +36,11 @@ class ProfileFragment : Fragment() {
 
         setupViewModel()
         setupObserver()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fragmentProfileBinding = null
     }
 
     private fun setupViewModel() {
@@ -47,6 +52,11 @@ class ProfileFragment : Fragment() {
 
     private fun setupObserver() {
         lifecycleScope.launch {
+            val name = getString(R.string.default_profile_name)
+            val picture = R.drawable.profile_picture
+            val email = getString(R.string.default_profile_email)
+
+            profileViewModel.setProfileContent(name, picture, email)
             profileViewModel.profileUIState.observe(viewLifecycleOwner, { event ->
                 event.getDataIfNotHandledYet()?.let { resource ->
                     when(resource.status) {
@@ -69,7 +79,7 @@ class ProfileFragment : Fragment() {
 
     private fun setContent(profile: Profile) {
         lifecycleScope.launch(Dispatchers.Main) {
-            fragmentProfileBinding.apply {
+            fragmentProfileBinding?.apply {
                 Glide.with(this@ProfileFragment)
                     .load(profile.picture)
                     .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
@@ -82,11 +92,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showProgressBar() {
-        fragmentProfileBinding.progressBar.isVisible = true
+        fragmentProfileBinding?.progressBar?.isVisible = true
     }
 
     private fun hideProgressBar() {
-        fragmentProfileBinding.progressBar.isVisible = false
+        fragmentProfileBinding?.progressBar?.isVisible = false
     }
 
     private fun showToast(message: String) {

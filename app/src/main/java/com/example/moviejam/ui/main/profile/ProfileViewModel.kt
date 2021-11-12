@@ -3,7 +3,6 @@ package com.example.moviejam.ui.main.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moviejam.R
 import com.example.moviejam.data.model.Profile
 import com.example.moviejam.utils.Event
 import com.example.moviejam.utils.Resource
@@ -14,20 +13,10 @@ class ProfileViewModel : ViewModel() {
     private val _profileUIState = MutableLiveData<Event<Resource<Profile>>>()
     val profileUIState: LiveData<Event<Resource<Profile>>> = _profileUIState
 
-    init {
-        val profile: Profile = getProfile()
-        setProfileContent(profile)
-    }
+    fun setProfileContent(profileName: String, profilePicture: Int, profileEmail: String) {
 
-    private fun getProfile(): Profile {
-        return Profile(
-            "Kadek Andre Suryana",
-            R.drawable.profile_picture,
-            "a014r4053@dicoding.com"
-        )
-    }
+        val profile = Profile(profileName, profilePicture, profileEmail)
 
-    private fun setProfileContent(profile: Profile) {
         _profileUIState.value = Event(Resource(Status.LOADING, null, null))
         /**
          * Check if :

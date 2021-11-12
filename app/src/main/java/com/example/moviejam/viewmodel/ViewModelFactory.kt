@@ -1,8 +1,7 @@
-package com.example.moviejam.utils
+package com.example.moviejam.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.moviejam.dispatchers.DispatcherProvider
 import com.example.moviejam.repository.MainRepository
 import com.example.moviejam.ui.main.home.HomeViewModel
 import com.example.moviejam.ui.main.movies.MoviesViewModel

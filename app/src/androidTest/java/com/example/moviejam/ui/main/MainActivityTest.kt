@@ -20,7 +20,7 @@ class MainActivityTest {
     var activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun homeFragment() {
+    fun mainFeatureTestAndCheck() {
 
         /**
          * Check if rv_top is displayed

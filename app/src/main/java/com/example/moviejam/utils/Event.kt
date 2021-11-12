@@ -2,8 +2,7 @@ package com.example.moviejam.utils
 
 open class Event<out T>(private val data: T) {
 
-    var handled = false
-        private set // This is for external read only
+    private var handled = false
 
     fun getDataIfNotHandledYet(): T? {
         return if (handled) {

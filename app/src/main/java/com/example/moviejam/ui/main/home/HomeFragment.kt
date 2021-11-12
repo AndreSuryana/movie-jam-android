@@ -21,13 +21,13 @@ import com.example.moviejam.databinding.FragmentHomeBinding
 import com.example.moviejam.repository.DummyDataRepository
 import com.example.moviejam.ui.detail.DetailActivity
 import com.example.moviejam.utils.Status
-import com.example.moviejam.utils.ViewModelFactory
+import com.example.moviejam.viewmodel.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
-    private lateinit var fragmentHomeBinding: FragmentHomeBinding
+    private var fragmentHomeBinding: FragmentHomeBinding? = null
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var topMoviesAdapter: TopAdapter
     private lateinit var popularMoviesAdapter: DataAdapter
@@ -37,9 +37,9 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         fragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
-        return fragmentHomeBinding.root
+        return fragmentHomeBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,10 +54,15 @@ class HomeFragment : Fragment() {
         setupObserver()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        fragmentHomeBinding = null
+    }
+
     private fun setupUI() {
         // Set dummy data for username in Home Fragment
         lifecycleScope.launch(Dispatchers.Main) {
-            fragmentHomeBinding.apply {
+            fragmentHomeBinding?.apply {
                 Glide.with(this@HomeFragment)
                     .load(R.drawable.profile_picture)
                     .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
@@ -67,7 +72,7 @@ class HomeFragment : Fragment() {
             }
 
             // UI Setup Top Movies
-            fragmentHomeBinding.rvTop.apply {
+            fragmentHomeBinding?.rvTop?.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 setHasFixedSize(true)
                 adapter = topMoviesAdapter
@@ -82,7 +87,7 @@ class HomeFragment : Fragment() {
             })
 
             // UI Setup Popular Movies
-            fragmentHomeBinding.rvPopularMovies.apply {
+            fragmentHomeBinding?.rvPopularMovies?.apply {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
                 adapter = popularMoviesAdapter
@@ -98,7 +103,7 @@ class HomeFragment : Fragment() {
         }
 
         // UI Setup Popular TV Shows
-        fragmentHomeBinding.rvPopularTvShows.apply {
+        fragmentHomeBinding?.rvPopularTvShows?.apply {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
             adapter = popularTvShowsAdapter
@@ -117,6 +122,7 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
             // Observer Top Movies
+            homeViewModel.setTopMovies()
             homeViewModel.listTopMovies.observe(viewLifecycleOwner, { event ->
                 event.getDataIfNotHandledYet()?.let { resource ->
                     when (resource.status) {
@@ -134,6 +140,7 @@ class HomeFragment : Fragment() {
             })
 
             // Observer Popular Movies
+            homeViewModel.setPopularMovies()
             homeViewModel.listPopularMovies.observe(viewLifecycleOwner, { event ->
                 event.getDataIfNotHandledYet()?.let { resource ->
                     when (resource.status) {
@@ -151,6 +158,7 @@ class HomeFragment : Fragment() {
             })
 
             // Observer
+            homeViewModel.setPopularTvShows()
             homeViewModel.listPopularTvShows.observe(viewLifecycleOwner, { event ->
                 event.getDataIfNotHandledYet()?.let { resource ->
                     when (resource.status) {
@@ -181,27 +189,27 @@ class HomeFragment : Fragment() {
     }
 
     private fun showProgressBarTopMovies() {
-        fragmentHomeBinding.progressBarTopMovies.isVisible = true
+        fragmentHomeBinding?.progressBarTopMovies?.isVisible = true
     }
 
     private fun hideProgressBarTopMovies() {
-        fragmentHomeBinding.progressBarTopMovies.isVisible = false
+        fragmentHomeBinding?.progressBarTopMovies?.isVisible = false
     }
 
     private fun showProgressBarPopularMovies() {
-        fragmentHomeBinding.progressBarPopularMovies.isVisible = true
+        fragmentHomeBinding?.progressBarPopularMovies?.isVisible = true
     }
 
     private fun hideProgressBarPopularMovies() {
-        fragmentHomeBinding.progressBarPopularMovies.isVisible = false
+        fragmentHomeBinding?.progressBarPopularMovies?.isVisible = false
     }
 
     private fun showProgressBarPopularTvShows() {
-        fragmentHomeBinding.progressBarPopularTvShows.isVisible = true
+        fragmentHomeBinding?.progressBarPopularTvShows?.isVisible = true
     }
 
     private fun hideProgressBarPopularTvShows() {
-        fragmentHomeBinding.progressBarPopularTvShows.isVisible = false
+        fragmentHomeBinding?.progressBarPopularTvShows?.isVisible = false
     }
 
     private fun showToast(message: String) {

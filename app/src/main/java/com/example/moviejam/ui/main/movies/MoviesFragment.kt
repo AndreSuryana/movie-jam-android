@@ -17,13 +17,13 @@ import com.example.moviejam.databinding.FragmentMoviesBinding
 import com.example.moviejam.repository.DummyDataRepository
 import com.example.moviejam.ui.detail.DetailActivity
 import com.example.moviejam.utils.Status
-import com.example.moviejam.utils.ViewModelFactory
+import com.example.moviejam.viewmodel.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MoviesFragment : Fragment() {
 
-    private lateinit var fragmentMoviesBinding: FragmentMoviesBinding
+    private var fragmentMoviesBinding: FragmentMoviesBinding? = null
     private lateinit var moviesViewModel: MoviesViewModel
     private lateinit var moviesAdapter: DataAdapter
 
@@ -31,9 +31,9 @@ class MoviesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         fragmentMoviesBinding = FragmentMoviesBinding.inflate(inflater, container, false)
-        return fragmentMoviesBinding.root
+        return fragmentMoviesBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,12 +46,19 @@ class MoviesFragment : Fragment() {
         setupObserver()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        fragmentMoviesBinding = null
+    }
+
     private fun setupUI() {
         lifecycleScope.launch(Dispatchers.Main) {
-            with(fragmentMoviesBinding.rvMovies) {
-                layoutManager = LinearLayoutManager(context)
-                setHasFixedSize(true)
-                adapter = moviesAdapter
+            fragmentMoviesBinding?.let {
+                it.rvMovies.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    setHasFixedSize(true)
+                    adapter = moviesAdapter
+                }
             }
             moviesAdapter.setOnItemClickListener(object : DataAdapter.OnItemClickListener {
                 override fun onClick(data: DataEntity) {
@@ -73,6 +80,7 @@ class MoviesFragment : Fragment() {
 
     private fun setupObserver() {
         lifecycleScope.launch {
+            moviesViewModel.setMovies()
             moviesViewModel.listMovies.observe(viewLifecycleOwner, { event ->
                 event.getDataIfNotHandledYet()?.let { resource ->
                     when (resource.status) {
@@ -94,11 +102,11 @@ class MoviesFragment : Fragment() {
     }
 
     private fun showProgressBar() {
-        fragmentMoviesBinding.progressBar.isVisible = true
+        fragmentMoviesBinding?.progressBar?.isVisible = true
     }
 
     private fun hideProgressBar() {
-        fragmentMoviesBinding.progressBar.isVisible = false
+        fragmentMoviesBinding?.progressBar?.isVisible = false
     }
 
     private fun showToast(message: String) {

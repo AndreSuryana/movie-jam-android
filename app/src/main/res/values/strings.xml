@@ -27,4 +27,8 @@
     <string name="profile_name">Profile Name</string>
     <string name="profile_picture">Profile Picture</string>
     <string name="profile_email">Email@email.com</string>
+    <string name="error_no_data">Error! No data was loaded!</string>
+    <string name="error_occurred">An error has been occurred!</string>
+    <string name="default_profile_name">Kadek Andre Suryana</string>
+    <string name="default_profile_email">a014r4053@dicoding.org</string>
 </resources>

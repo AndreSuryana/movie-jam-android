@@ -22,6 +22,8 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_MovieJam)
+
         activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(activityDetailBinding.root)
 
@@ -88,7 +90,7 @@ class DetailActivity : AppCompatActivity() {
                     }
                     is DetailViewModel.DataEvent.Empty -> {
                         hideProgressBar()
-                        showToast("Error! No data was loaded!")
+                        showToast(getString(R.string.error_no_data))
                     }
                 }
             })

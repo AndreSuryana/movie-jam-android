@@ -17,13 +17,13 @@ import com.example.moviejam.databinding.FragmentTvShowsBinding
 import com.example.moviejam.repository.DummyDataRepository
 import com.example.moviejam.ui.detail.DetailActivity
 import com.example.moviejam.utils.Status
-import com.example.moviejam.utils.ViewModelFactory
+import com.example.moviejam.viewmodel.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TvShowsFragment : Fragment() {
 
-    private lateinit var fragmentTvShowsBinding: FragmentTvShowsBinding
+    private var fragmentTvShowsBinding: FragmentTvShowsBinding? = null
     private lateinit var tvShowsViewModel: TvShowsViewModel
     private lateinit var tvShowsAdapter: DataAdapter
 
@@ -31,9 +31,9 @@ class TvShowsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         fragmentTvShowsBinding = FragmentTvShowsBinding.inflate(inflater, container, false)
-        return fragmentTvShowsBinding.root
+        return fragmentTvShowsBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,10 +48,12 @@ class TvShowsFragment : Fragment() {
 
     private fun setupUI() {
         lifecycleScope.launch(Dispatchers.Main) {
-            with(fragmentTvShowsBinding.rvTvShows) {
-                layoutManager = LinearLayoutManager(context)
-                setHasFixedSize(true)
-                adapter = tvShowsAdapter
+            fragmentTvShowsBinding?.let {
+                it.rvTvShows.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    setHasFixedSize(true)
+                    adapter = tvShowsAdapter
+                }
             }
             tvShowsAdapter.setOnItemClickListener(object : DataAdapter.OnItemClickListener {
                 override fun onClick(data: DataEntity) {
@@ -73,6 +75,7 @@ class TvShowsFragment : Fragment() {
 
     private fun setupObserver() {
         lifecycleScope.launch {
+            tvShowsViewModel.setTvShows()
             tvShowsViewModel.listTvShows.observe(viewLifecycleOwner, { event ->
                 event.getDataIfNotHandledYet()?.let { resource ->
                     when (resource.status) {
@@ -94,11 +97,11 @@ class TvShowsFragment : Fragment() {
     }
 
     private fun showProgressBar() {
-        fragmentTvShowsBinding.progressBar.isVisible = true
+        fragmentTvShowsBinding?.progressBar?.isVisible = true
     }
 
     private fun hideProgressBar() {
-        fragmentTvShowsBinding.progressBar.isVisible = false
+        fragmentTvShowsBinding?.progressBar?.isVisible = false
     }
 
     private fun showToast(message: String) {
