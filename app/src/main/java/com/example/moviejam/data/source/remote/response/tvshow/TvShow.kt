@@ -17,8 +17,5 @@ data class TvShow(
 	val voteAverage: Double,
 
 	@field:SerializedName("first_air_date")
-	val firstAirDate: String,
-
-	@field:SerializedName("genre_ids")
-	val genreIds: List<Int>
+	val firstAirDate: String
 )

@@ -17,8 +17,5 @@ data class Movie(
 	val voteAverage: Double,
 
 	@field:SerializedName("release_date")
-	val releaseDate: String,
-
-	@field:SerializedName("genre_ids")
-	val genreIds: List<Int>
+	val releaseDate: String
 )
