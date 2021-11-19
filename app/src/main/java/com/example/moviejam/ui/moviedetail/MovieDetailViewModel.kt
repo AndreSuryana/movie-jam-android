@@ -2,7 +2,6 @@ package com.example.moviejam.ui.moviedetail
 
 import androidx.lifecycle.*
 import com.example.moviejam.data.source.remote.response.moviedetail.MovieDetailResponse
-import com.example.moviejam.dispatchers.DispatcherProvider
 import com.example.moviejam.repository.MainRepository
 import com.example.moviejam.utils.Event
 import com.example.moviejam.utils.Resource
@@ -13,15 +12,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
-    private val repository: MainRepository,
-    private val dispatcher: DispatcherProvider
+    private val repository: MainRepository
 ) : ViewModel() {
 
     private val _dataDetail = MutableLiveData<Event<Resource<MovieDetailResponse>>>()
     val dataDetail: LiveData<Event<Resource<MovieDetailResponse>>> = _dataDetail
 
     fun setData(id: Int) {
-        viewModelScope.launch(dispatcher.io) {
+        viewModelScope.launch {
             _dataDetail.postValue(Event(Resource(Status.LOADING, null, null)))
 
             val response = repository.getMovieDetail(id.toString())

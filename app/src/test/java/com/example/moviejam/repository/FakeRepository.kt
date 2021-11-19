@@ -126,46 +126,56 @@ class FakeRepository : MainRepository {
     }
 
     override suspend fun getMovieDetail(movieId: String): Resource<MovieDetailResponse> {
-        val result = MovieDetailResponse(
-            1,
-            "Data 1",
-            "Data 1",
-            "Data 1",
-            1.0,
-            "Data 1",
-            genres = listOf(
-                MovieGenresItem("Genre 1", 1),
-                MovieGenresItem("Genre 2", 2)
-            ),
-            "Data 1",
-            "Data 1",
-            "Data 1",
-            productionCompanies = listOf(
-                MovieProductionCompaniesItem("Company 1", "Company 1", 1, "Company 1")
+        // Simulate that id is 1
+        return if (movieId == "1") {
+            val result = MovieDetailResponse(
+                1,
+                "Data 1",
+                "Data 1",
+                "Data 1",
+                1.0,
+                "Data 1",
+                genres = listOf(
+                    MovieGenresItem("Genre 1", 1),
+                    MovieGenresItem("Genre 2", 2)
+                ),
+                "Data 1",
+                "Data 1",
+                "Data 1",
+                productionCompanies = listOf(
+                    MovieProductionCompaniesItem("Company 1", "Company 1", 1, "Company 1")
+                )
             )
-        )
-        return Resource.success(result)
+            Resource.success(result)
+        } else {
+            Resource.error("Error!")
+        }
     }
 
     override suspend fun getTvShowDetail(tvId: String): Resource<TvShowDetailResponse> {
-        val result = TvShowDetailResponse(
-            1,
-            "Data 1",
-            "Data 1",
-            "Data 1",
-            1.0,
-            "Data 1",
-            genres = listOf(
-                TvShowGenresItem("Genre 1", 1),
-                TvShowGenresItem("Genre 2", 2)
-            ),
-            "Data 1",
-            "Data 1",
-            "Data 1",
-            productionCompanies = listOf(
-                TvShowProductionCompaniesItem("Company 1", "Company 1", 1, "Company 1")
+        // Simulate that id is 1
+        return if (tvId == "1") {
+            val result = TvShowDetailResponse(
+                1,
+                "Data 1",
+                "Data 1",
+                "Data 1",
+                1.0,
+                "Data 1",
+                genres = listOf(
+                    TvShowGenresItem("Genre 1", 1),
+                    TvShowGenresItem("Genre 2", 2)
+                ),
+                "Data 1",
+                "Data 1",
+                "Data 1",
+                productionCompanies = listOf(
+                    TvShowProductionCompaniesItem("Company 1", "Company 1", 1, "Company 1")
+                )
             )
-        )
-        return Resource.success(result)
+            Resource.success(result)
+        } else {
+            Resource.error("Error!")
+        }
     }
 }
