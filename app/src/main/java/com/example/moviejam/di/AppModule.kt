@@ -1,7 +1,13 @@
 package com.example.moviejam.di
 
+import android.content.Context
+import androidx.room.Room
 import com.example.moviejam.BuildConfig
 import com.example.moviejam.constant.Constants
+import com.example.moviejam.data.source.local.LocalDataSource
+import com.example.moviejam.data.source.local.LocalDataSourceImpl
+import com.example.moviejam.data.source.local.room.FavoriteDao
+import com.example.moviejam.data.source.local.room.FavoriteDatabase
 import com.example.moviejam.data.source.remote.MovieJamAPI
 import com.example.moviejam.dispatchers.DispatcherProvider
 import com.example.moviejam.repository.MainRepository
@@ -9,6 +15,7 @@ import com.example.moviejam.repository.MovieJamRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -59,4 +66,22 @@ object AppModule {
         override val unconfined: CoroutineDispatcher
             get() = Dispatchers.Unconfined
     }
+
+    @Singleton
+    @Provides
+    fun provideFavoriteDatabase(@ApplicationContext context: Context): FavoriteDatabase =
+        Room.databaseBuilder(
+            context.applicationContext,
+            FavoriteDatabase::class.java,
+            "favorite_database"
+        ).build()
+
+    @Singleton
+    @Provides
+    fun provideFavoriteDao(favoriteDatabase: FavoriteDatabase): FavoriteDao =
+        favoriteDatabase.favoriteDao()
+
+    @Singleton
+    @Provides
+    fun provideLocalDataSource(favoriteDao: FavoriteDao): LocalDataSource = LocalDataSourceImpl(favoriteDao)
 }

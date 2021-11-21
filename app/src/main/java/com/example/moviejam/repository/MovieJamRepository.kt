@@ -58,7 +58,7 @@ class MovieJamRepository @Inject constructor(
         }
     }
 
-    override suspend fun getMovies(): Resource<MoviesResponse>{
+    override suspend fun getMovies(): Resource<MoviesResponse> {
         return try {
             EspressoIdlingResources.increment()
             val response = api.getPopularMovies()

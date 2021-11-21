@@ -10,19 +10,21 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/ToolbarTextStyle"
-            android:text="@string/title_movies"/>
+            android:text="@string/title_movies" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movies"
         style="@style/HomeContentRecyclerView"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
         android:paddingBottom="?android:attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,10 +37,11 @@
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/grey"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toTopOf="@id/rv_movies"
-        app:layout_constraintStart_toStartOf="@id/rv_movies"
-        app:layout_constraintEnd_toEndOf="@id/rv_movies"
-        app:layout_constraintBottom_toBottomOf="@id/rv_movies" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

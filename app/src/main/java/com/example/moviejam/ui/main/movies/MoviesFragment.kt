@@ -38,7 +38,12 @@ class MoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        moviesAdapter = MoviesAdapter()
+        setupUI()
+        setupObserver()
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         setupUI()
         setupObserver()
@@ -50,6 +55,8 @@ class MoviesFragment : Fragment() {
     }
 
     private fun setupUI() {
+        moviesAdapter = MoviesAdapter()
+
         lifecycleScope.launch(Dispatchers.Main) {
             fragmentMoviesBinding?.let {
                 it.rvMovies.apply {
@@ -80,7 +87,7 @@ class MoviesFragment : Fragment() {
                             resource.data?.let { moviesAdapter.setList(it) }
                         }
                         Status.ERROR -> {
-                            hideProgressBar()
+                            showProgressBar()
                             showToast(resource.message.toString())
                         }
                         Status.LOADING -> {

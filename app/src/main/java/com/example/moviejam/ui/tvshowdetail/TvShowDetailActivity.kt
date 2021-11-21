@@ -19,6 +19,7 @@ import com.example.moviejam.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class TvShowDetailActivity : AppCompatActivity() {
@@ -57,6 +58,31 @@ class TvShowDetailActivity : AppCompatActivity() {
 
         // Back button
         activityDetailBinding.btnBack.setOnClickListener { onBackClicked() }
+
+        // Toggle Favorite
+        var checked = false
+        lifecycleScope.launch(Dispatchers.Main) {
+            val count = tvShowDetailViewModel.checkFavoriteTvShow(data.id)
+            withContext(Dispatchers.Main) {
+                if (count != null && count > 0) {
+                    activityDetailBinding.toggleFavorite.isChecked = true
+                    checked = true
+                } else {
+                    activityDetailBinding.toggleFavorite.isChecked = false
+                    checked = false
+                }
+            }
+        }
+
+        activityDetailBinding.toggleFavorite.setOnClickListener {
+            checked = !checked
+            lifecycleScope.launch(Dispatchers.IO) {
+                if (checked)
+                    tvShowDetailViewModel.addTvShowToFavorite(data)
+                else
+                    tvShowDetailViewModel.deleteTvShowFromFavorite(data.id)
+            }
+        }
     }
 
     private fun getCreator(creatorItems: List<ProductionCompaniesItem>): String {

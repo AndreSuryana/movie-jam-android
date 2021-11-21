@@ -27,4 +27,5 @@
     <string name="profile_email">Email@email.com</string>
     <string name="default_profile_name">Kadek Andre Suryana</string>
     <string name="default_profile_email">a014r4053@dicoding.org</string>
+    <string name="title_favorite">Favorite</string>
 </resources>

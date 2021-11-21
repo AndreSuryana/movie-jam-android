@@ -38,13 +38,25 @@ class TvShowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tvShowsAdapter = TvShowsAdapter()
+        setupUI()
+        setupObserver()
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         setupUI()
         setupObserver()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        fragmentTvShowsBinding = null
+    }
+
     private fun setupUI() {
+        tvShowsAdapter = TvShowsAdapter()
+
         lifecycleScope.launch(Dispatchers.Main) {
             fragmentTvShowsBinding?.let {
                 it.rvTvShows.apply {
@@ -75,7 +87,7 @@ class TvShowsFragment : Fragment() {
                             resource.data?.let { tvShowsAdapter.setList(it) }
                         }
                         Status.ERROR -> {
-                            hideProgressBar()
+                            showProgressBar()
                             showToast(resource.message.toString())
                         }
                         Status.LOADING -> {

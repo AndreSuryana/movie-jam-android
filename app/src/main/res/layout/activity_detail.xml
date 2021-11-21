@@ -30,6 +30,18 @@
             android:maxLines="1"
             android:text="@string/movies_title" />
 
+        <androidx.appcompat.widget.AppCompatToggleButton
+            android:id="@+id/toggle_favorite"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/red"
+            android:background="@drawable/toggle_favorite"
+            android:textOff=""
+            android:textOn=""
+            tools:checked="true" />
+
     </com.google.android.material.appbar.MaterialToolbar>
 
     <ScrollView
@@ -71,19 +83,20 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_title"
+                style="@style/DetailContentTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:text="@string/title"
-                style="@style/DetailContentTitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_poster"
                 app:layout_constraintTop_toBottomOf="@+id/iv_poster_bg" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_rating"
+                style="@style/DetailRatingText"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:layout_marginTop="4dp"
@@ -91,7 +104,6 @@
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
                 android:text="@string/rating"
-                style="@style/DetailRatingText"
                 app:layout_constraintStart_toStartOf="@+id/tv_title"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
@@ -109,10 +121,10 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_date"
+                style="@style/DetailTextContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/release_date"
-                style="@style/DetailTextContent"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_dots_divider1"
                 app:layout_constraintStart_toEndOf="@+id/tv_dots_divider1"
                 app:layout_constraintTop_toTopOf="@+id/tv_dots_divider1" />
@@ -132,71 +144,71 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_overview_label"
+                style="@style/DetailContentTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/overview_label"
-                style="@style/DetailContentTitle"
                 app:layout_constraintStart_toStartOf="@+id/iv_poster"
                 app:layout_constraintTop_toBottomOf="@+id/iv_poster" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_overview"
+                style="@style/DetailTextContent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="32dp"
                 android:text="@string/overview_label"
-                style="@style/DetailTextContent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_overview_label"
                 app:layout_constraintTop_toBottomOf="@+id/tv_overview_label" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_status_label"
+                style="@style/DetailContentTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/status_label"
-                style="@style/DetailContentTitle"
                 app:layout_constraintStart_toStartOf="@+id/tv_overview"
                 app:layout_constraintTop_toBottomOf="@+id/tv_overview" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_status"
+                style="@style/DetailTextContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_label"
-                style="@style/DetailTextContent"
                 app:layout_constraintStart_toStartOf="@+id/tv_status_label"
                 app:layout_constraintTop_toBottomOf="@+id/tv_status_label" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_language_label"
+                style="@style/DetailContentTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/language_label"
-                style="@style/DetailContentTitle"
                 app:layout_constraintStart_toStartOf="@+id/tv_status"
                 app:layout_constraintTop_toBottomOf="@+id/tv_status" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_language"
+                style="@style/DetailTextContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_label"
-                style="@style/DetailTextContent"
                 app:layout_constraintStart_toStartOf="@+id/tv_language_label"
                 app:layout_constraintTop_toBottomOf="@+id/tv_language_label" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_creator_label"
+                style="@style/DetailContentTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/creator_label"
-                style="@style/DetailContentTitle"
                 app:layout_constraintStart_toStartOf="@+id/tv_language"
                 app:layout_constraintTop_toBottomOf="@+id/tv_language" />
 
@@ -205,8 +217,8 @@
                 style="@style/DetailTextContent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/creator_label"
                 android:layout_marginEnd="32dp"
+                android:text="@string/creator_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_creator_label"
                 app:layout_constraintTop_toBottomOf="@+id/tv_creator_label" />
@@ -221,10 +233,10 @@
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/grey"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

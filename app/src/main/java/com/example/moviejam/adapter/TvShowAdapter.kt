@@ -39,7 +39,7 @@ class TvShowsAdapter : RecyclerView.Adapter<TvShowsAdapter.TvShowsViewHolder>() 
     override fun onBindViewHolder(holder: TvShowsViewHolder, position: Int) {
         val data = listData[position]
         holder.bind(data)
-        holder.itemView.setOnClickListener { onItemClickListener?.onClick(listData[holder.adapterPosition].id) }
+        holder.itemView.setOnClickListener { onItemClickListener?.onClick(listData[holder.absoluteAdapterPosition].id) }
     }
 
     override fun getItemCount(): Int = listData.size

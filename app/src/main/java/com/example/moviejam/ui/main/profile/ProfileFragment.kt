@@ -65,7 +65,7 @@ class ProfileFragment : Fragment() {
                             resource.data?.let { setContent(it) }
                         }
                         Status.ERROR -> {
-                            hideProgressBar()
+                            showProgressBar()
                             resource.message?.let { showToast(it) }
                         }
                         Status.LOADING -> {

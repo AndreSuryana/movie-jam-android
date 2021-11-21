@@ -48,6 +48,15 @@ class HomeFragment : Fragment() {
         popularTVShowsContent()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        greetingsContent()
+        topMoviesContent()
+        popularMoviesContent()
+        popularTVShowsContent()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         fragmentHomeBinding = null
@@ -69,7 +78,7 @@ class HomeFragment : Fragment() {
                             resource.data?.let { topMoviesAdapter.setListTopMovies(it) }
                         }
                         Status.ERROR -> {
-                            hideProgressBarTopMovies()
+                            showProgressBarTopMovies()
                             showToast(resource.message.toString())
                         }
                         Status.LOADING -> showProgressBarTopMovies()
@@ -112,7 +121,7 @@ class HomeFragment : Fragment() {
                             resource.data?.let { popularMoviesAdapter.setList(it) }
                         }
                         Status.ERROR -> {
-                            hideProgressBarPopularMovies()
+                            showProgressBarPopularMovies()
                             showToast(resource.message.toString())
                         }
                         Status.LOADING -> showProgressBarPopularMovies()
@@ -155,7 +164,7 @@ class HomeFragment : Fragment() {
                             resource.data?.let { popularTvShowsAdapter.setList(it) }
                         }
                         Status.ERROR -> {
-                            hideProgressBarPopularTvShows()
+                            showProgressBarPopularTvShows()
                             showToast(resource.message.toString())
                         }
                         Status.LOADING -> {
