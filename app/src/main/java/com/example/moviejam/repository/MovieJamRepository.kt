@@ -117,4 +117,35 @@ class MovieJamRepository @Inject constructor(
             Resource.error(e.message ?: "An error occurred!")
         }
     }
+
+    override suspend fun searchMovies(query: String): Resource<MoviesResponse> {
+        return try {
+            EspressoIdlingResources.increment()
+            val response = api.searchMovies(query = query)
+            val result = response.body()
+            EspressoIdlingResources.decrement()
+            if (response.isSuccessful && result != null)
+                Resource.success(result)
+            else
+                Resource.error(response.message())
+        } catch (e: Exception) {
+            Resource.error(e.message ?: "An error occurred!")
+        }
+    }
+
+    override suspend fun searchTvShows(query: String): Resource<TvShowsResponse> {
+        return try {
+            EspressoIdlingResources.increment()
+            val response = api.searchTvShows(query = query)
+            val result = response.body()
+            EspressoIdlingResources.decrement()
+            if (response.isSuccessful && result != null) {
+                Resource.success(result)
+            } else {
+                Resource.error(response.message())
+            }
+        } catch (e: Exception) {
+            Resource.error(e.message ?: "An error occurred!")
+        }
+    }
 }

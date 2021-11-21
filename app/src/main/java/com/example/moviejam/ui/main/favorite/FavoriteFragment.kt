@@ -7,17 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moviejam.adapter.MoviesAdapter
-import com.example.moviejam.adapter.TvShowsAdapter
-import com.example.moviejam.data.source.local.entity.FavoriteEntity
-import com.example.moviejam.data.source.remote.response.movie.Movie
-import com.example.moviejam.data.source.remote.response.tvshow.TvShow
+import com.example.moviejam.adapter.FavoriteAdapter
 import com.example.moviejam.databinding.FragmentFavoriteBinding
 import com.example.moviejam.ui.moviedetail.MovieDetailActivity
 import com.example.moviejam.ui.tvshowdetail.TvShowDetailActivity
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment() {
@@ -50,7 +48,8 @@ class FavoriteFragment : Fragment() {
         setContentMoviesFavorite()
 
         // Tab Layout Listener
-        favoriteFragmentBinding?.tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        favoriteFragmentBinding?.tabLayout?.addOnTabSelectedListener(object :
+            TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.text) {
@@ -66,7 +65,7 @@ class FavoriteFragment : Fragment() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-               Any()
+                Any()
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -85,7 +84,7 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun setContentMoviesFavorite() {
-        val moviesAdapter = MoviesAdapter()
+        val moviesAdapter = FavoriteAdapter()
 
         favoriteFragmentBinding?.rvFavorites?.apply {
             layoutManager = LinearLayoutManager(context)
@@ -93,7 +92,8 @@ class FavoriteFragment : Fragment() {
             adapter = moviesAdapter
         }
 
-        moviesAdapter.setOnItemClickListener(object : MoviesAdapter.OnItemClickListener {
+        moviesAdapter.setOnItemClickListener(object :
+            FavoriteAdapter.OnItemClickListener {
             override fun onClick(id: Int) {
                 Intent(activity, MovieDetailActivity::class.java).also {
                     it.putExtra(MovieDetailActivity.EXTRA_ID, id)
@@ -102,14 +102,21 @@ class FavoriteFragment : Fragment() {
             }
         })
 
-        favoriteViewModel.getFavoriteMovies().observe(viewLifecycleOwner, { list ->
-            val favoriteMovies = mapToMovieList(list)
-            moviesAdapter.setList(favoriteMovies)
+        moviesAdapter.setOnBtnDeleteClickListener(object : FavoriteAdapter.OnBtnDeleteClickListener {
+            override fun onClick(id: Int) {
+                favoriteViewModel.deleteFromFavorites(id)
+            }
         })
+
+        lifecycleScope.launch {
+            favoriteViewModel.getFavoriteMovies().observe(viewLifecycleOwner, { list ->
+                moviesAdapter.setList(list)
+            })
+        }
     }
 
     private fun setContentTvShowsFavorite() {
-        val tvShowsAdapter = TvShowsAdapter()
+        val tvShowsAdapter = FavoriteAdapter()
 
         favoriteFragmentBinding?.rvFavorites?.apply {
             layoutManager = LinearLayoutManager(context)
@@ -117,7 +124,8 @@ class FavoriteFragment : Fragment() {
             adapter = tvShowsAdapter
         }
 
-        tvShowsAdapter.setOnItemClickListener(object : TvShowsAdapter.OnItemClickListener {
+        tvShowsAdapter.setOnItemClickListener(object :
+            FavoriteAdapter.OnItemClickListener {
             override fun onClick(id: Int) {
                 Intent(activity, TvShowDetailActivity::class.java).also {
                     it.putExtra(TvShowDetailActivity.EXTRA_ID, id)
@@ -126,40 +134,17 @@ class FavoriteFragment : Fragment() {
             }
         })
 
-        favoriteViewModel.getFavoriteTvShows().observe(viewLifecycleOwner, { list ->
-            val favoriteTvShows = mapToTvShowList(list)
-            tvShowsAdapter.setList(favoriteTvShows)
+        tvShowsAdapter.setOnBtnDeleteClickListener(object : FavoriteAdapter.OnBtnDeleteClickListener {
+            override fun onClick(id: Int) {
+                favoriteViewModel.deleteFromFavorites(id)
+            }
         })
-    }
 
-    private fun mapToMovieList(list: List<FavoriteEntity>): List<Movie> {
-        val listMovie = ArrayList<Movie>()
-        list.forEach {
-            val newMovie = Movie(
-                it.id,
-                it.posterPath,
-                it.title,
-                it.voteAverage,
-                it.releaseDate
-            )
-            listMovie.add(newMovie)
+        lifecycleScope.launch {
+            favoriteViewModel.getFavoriteTvShows().observe(viewLifecycleOwner, { list ->
+                tvShowsAdapter.setList(list)
+            })
         }
-        return listMovie
-    }
-
-    private fun mapToTvShowList(list: List<FavoriteEntity>): List<TvShow> {
-        val listTvShow = ArrayList<TvShow>()
-        list.forEach {
-            val newMovie = TvShow(
-                it.id,
-                it.posterPath,
-                it.title,
-                it.voteAverage,
-                it.releaseDate
-            )
-            listTvShow.add(newMovie)
-        }
-        return listTvShow
     }
 
     override fun onDestroy() {

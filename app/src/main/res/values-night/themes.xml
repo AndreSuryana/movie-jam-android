@@ -46,8 +46,6 @@
 
     <!-- Card View List Styling -->
     <style name="CardViewListTitle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:maxLines">2</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">14sp</item>

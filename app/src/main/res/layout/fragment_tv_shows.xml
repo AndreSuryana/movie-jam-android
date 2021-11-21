@@ -18,6 +18,13 @@
             style="@style/ToolbarTextStyle"
             android:text="@string/title_tv_shows" />
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/sv_tv_shows"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            app:queryHint="@string/search_tv_shows" />
+
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.recyclerview.widget.RecyclerView

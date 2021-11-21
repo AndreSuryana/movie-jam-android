@@ -48,4 +48,16 @@ interface MovieJamAPI {
         @Path("tv_id") tvId: String,
         @Query("api_key") apiKey: String = BuildConfig.API_KEY
     ): Response<TvShowDetailResponse>
+
+    @GET("/search/movie")
+    suspend fun searchMovies(
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+        @Query("query") query: String
+    ): Response<MoviesResponse>
+
+    @GET("/search/tv")
+    suspend fun searchTvShows(
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+        @Query("query") query: String
+    ): Response<TvShowsResponse>
 }

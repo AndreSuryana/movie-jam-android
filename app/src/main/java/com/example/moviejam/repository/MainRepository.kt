@@ -15,4 +15,6 @@ interface MainRepository {
     suspend fun getTvShows(): Resource<TvShowsResponse>
     suspend fun getMovieDetail(movieId: String): Resource<MovieDetailResponse>
     suspend fun getTvShowDetail(tvId: String): Resource<TvShowDetailResponse>
+    suspend fun searchMovies(query: String): Resource<MoviesResponse>
+    suspend fun searchTvShows(query: String): Resource<TvShowsResponse>
 }

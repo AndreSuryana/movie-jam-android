@@ -74,7 +74,7 @@ object AppModule {
             context.applicationContext,
             FavoriteDatabase::class.java,
             "favorite_database"
-        ).build()
+        ).allowMainThreadQueries().build()
 
     @Singleton
     @Provides
