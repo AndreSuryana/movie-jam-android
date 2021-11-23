@@ -28,7 +28,7 @@ class TestLocalDataSource : LocalDataSource {
     }
 
     override fun getListFavoriteMovies(): LiveData<List<FavoriteEntity>> {
-        TODO("Not yet implemented")
+
     }
 
     override fun getListFavoriteTvShows(): LiveData<List<FavoriteEntity>> {

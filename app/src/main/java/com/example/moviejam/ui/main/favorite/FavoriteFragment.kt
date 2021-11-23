@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -65,7 +67,14 @@ class FavoriteFragment : Fragment() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                Any()
+                when (tab?.text) {
+                    TabContent.Movies -> {
+                        setContentTvShowsFavorite()
+                    }
+                    TabContent.TvShows -> {
+                        setContentMoviesFavorite()
+                    }
+                }
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -102,15 +111,23 @@ class FavoriteFragment : Fragment() {
             }
         })
 
-        moviesAdapter.setOnBtnDeleteClickListener(object : FavoriteAdapter.OnBtnDeleteClickListener {
+        moviesAdapter.setOnBtnDeleteClickListener(object :
+            FavoriteAdapter.OnBtnDeleteClickListener {
             override fun onClick(id: Int) {
                 favoriteViewModel.deleteFromFavorites(id)
             }
         })
 
+        showProgressBar()
         lifecycleScope.launch {
             favoriteViewModel.getFavoriteMovies().observe(viewLifecycleOwner, { list ->
-                moviesAdapter.setList(list)
+                if (list.isNotEmpty()) {
+                    moviesAdapter.setList(list)
+                    hideProgressBar()
+                } else {
+                    showToast("Favorite Movies is Empty!")
+                    hideProgressBar()
+                }
             })
         }
     }
@@ -134,15 +151,23 @@ class FavoriteFragment : Fragment() {
             }
         })
 
-        tvShowsAdapter.setOnBtnDeleteClickListener(object : FavoriteAdapter.OnBtnDeleteClickListener {
+        tvShowsAdapter.setOnBtnDeleteClickListener(object :
+            FavoriteAdapter.OnBtnDeleteClickListener {
             override fun onClick(id: Int) {
                 favoriteViewModel.deleteFromFavorites(id)
             }
         })
 
+        showProgressBar()
         lifecycleScope.launch {
             favoriteViewModel.getFavoriteTvShows().observe(viewLifecycleOwner, { list ->
-                tvShowsAdapter.setList(list)
+                if (list.isNotEmpty()) {
+                    tvShowsAdapter.setList(list)
+                    hideProgressBar()
+                } else {
+                    showToast("Favorite TV Shows is Empty!")
+                    hideProgressBar()
+                }
             })
         }
     }
@@ -150,5 +175,17 @@ class FavoriteFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         favoriteFragmentBinding = null
+    }
+
+    private fun showProgressBar() {
+        favoriteFragmentBinding?.progressBar?.isVisible = true
+    }
+
+    private fun hideProgressBar() {
+        favoriteFragmentBinding?.progressBar?.isVisible = false
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }
