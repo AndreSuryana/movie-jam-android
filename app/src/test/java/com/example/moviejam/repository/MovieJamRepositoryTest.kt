@@ -1,5 +1,7 @@
 package com.example.moviejam.repository
 
+import androidx.paging.PagingData
+import com.example.moviejam.data.source.remote.response.movie.Movie
 import com.example.moviejam.utils.DummyData
 import com.example.moviejam.utils.Resource
 import com.google.common.truth.Truth.assertThat
@@ -55,22 +57,15 @@ class MovieJamRepositoryTest {
 
     @Test
     fun getMovies() = runBlockingTest {
-        `when`(fakeRepository.getMovies()).thenReturn(Resource.success(dummyMoviesResponse))
-        val moviesResult = fakeRepository.getMovies()
-        verify(fakeRepository).getMovies()
+        @Suppress("UNCHECKED_CAST")
+        val dataSourceFactory = mock(PagingData::class.java) as PagingData<Movie>
+        `when`(fakeRepository.getMovies()).thenReturn(dataSourceFactory)
 
-        assertThat(moviesResult).isNotNull()
-        assertThat(moviesResult.data).isEqualTo(dummyMoviesResponse)
     }
 
     @Test
     fun getTvShows() = runBlockingTest {
-        `when`(fakeRepository.getTvShows()).thenReturn(Resource.success(dummyTvShowsResponse))
-        val tvShowsResult = fakeRepository.getTvShows()
-        verify(fakeRepository).getTvShows()
 
-        assertThat(tvShowsResult).isNotNull()
-        assertThat(tvShowsResult.data).isEqualTo(dummyTvShowsResponse)
     }
 
     @Test

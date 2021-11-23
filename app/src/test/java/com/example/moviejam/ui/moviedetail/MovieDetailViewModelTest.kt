@@ -2,6 +2,8 @@ package com.example.moviejam.ui.moviedetail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.moviejam.MainCoroutineRule
+import com.example.moviejam.data.source.local.LocalDataSource
+import com.example.moviejam.data.source.local.TestLocalDataSource
 import com.example.moviejam.getOrAwaitListTest
 import com.google.common.truth.Truth.assertThat
 import com.example.moviejam.repository.FakeRepository
@@ -24,11 +26,13 @@ class MovieDetailViewModelTest {
 
     private lateinit var movieDetailViewModel: MovieDetailViewModel
     private lateinit var fakeRepository: FakeRepository
+    private lateinit var localDataSource: LocalDataSource
 
     @Before
     fun setUp() {
         fakeRepository = FakeRepository()
-        movieDetailViewModel = MovieDetailViewModel(fakeRepository)
+        localDataSource = TestLocalDataSource()
+        movieDetailViewModel = MovieDetailViewModel(fakeRepository, localDataSource)
     }
 
     @Test

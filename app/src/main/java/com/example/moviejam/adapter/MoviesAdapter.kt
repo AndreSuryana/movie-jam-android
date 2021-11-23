@@ -2,16 +2,12 @@ package com.example.moviejam.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.example.moviejam.R
-import com.example.moviejam.constant.Constants
 import com.example.moviejam.data.source.remote.response.movie.Movie
 import com.example.moviejam.databinding.CardviewListBinding
 import com.example.moviejam.diffutil.MovieDiffCallback
+import com.example.moviejam.utils.Extensions.loadImage
 
 class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
@@ -53,15 +49,6 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
                 tvDate.text = data.releaseDate
             }
         }
-    }
-
-    private fun ImageView.loadImage(path: String?) {
-        val url = Constants.IMAGE_BASE_URL + path
-        Glide.with(this.context)
-            .load(url)
-            .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
-            .error(R.drawable.placeholder)
-            .into(this)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

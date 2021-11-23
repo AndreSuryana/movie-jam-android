@@ -41,8 +41,6 @@ class HomeViewModelTest {
         // Set movie list in fake repository to empty list
         fakeRepository.setTopMoviesList(emptyList())
 
-
-
         // Set value of listTopMovies in View Model
         mainCoroutineScope.launch {
             homeViewModel.setTopMovies()

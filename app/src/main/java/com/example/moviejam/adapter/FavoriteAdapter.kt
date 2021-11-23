@@ -2,16 +2,12 @@ package com.example.moviejam.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.example.moviejam.R
-import com.example.moviejam.constant.Constants
 import com.example.moviejam.data.source.local.entity.FavoriteEntity
 import com.example.moviejam.databinding.CardviewListFavoriteBinding
 import com.example.moviejam.diffutil.FavoriteDiffCallback
+import com.example.moviejam.utils.Extensions.loadImage
 
 class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.MoviesViewHolder>() {
 
@@ -57,15 +53,6 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.MoviesViewHolder>()
         }
 
         fun getBinding() = binding
-    }
-
-    private fun ImageView.loadImage(path: String?) {
-        val url = Constants.IMAGE_BASE_URL + path
-        Glide.with(this.context)
-            .load(url)
-            .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
-            .error(R.drawable.placeholder)
-            .into(this)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

@@ -2,6 +2,8 @@ package com.example.moviejam.ui.tvshowdetail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.moviejam.MainCoroutineRule
+import com.example.moviejam.data.source.local.LocalDataSource
+import com.example.moviejam.data.source.local.TestLocalDataSource
 import com.example.moviejam.getOrAwaitListTest
 import com.example.moviejam.repository.FakeRepository
 import com.example.moviejam.utils.Status
@@ -23,11 +25,13 @@ class TvShowDetailViewModelTest {
 
     private lateinit var tvShowDetailViewModel: TvShowDetailViewModel
     private lateinit var fakeRepository: FakeRepository
+    private lateinit var localDataSource: LocalDataSource
 
     @Before
     fun setUp() {
         fakeRepository = FakeRepository()
-        tvShowDetailViewModel = TvShowDetailViewModel(fakeRepository)
+        localDataSource = TestLocalDataSource()
+        tvShowDetailViewModel = TvShowDetailViewModel(fakeRepository, localDataSource)
     }
 
     @Test

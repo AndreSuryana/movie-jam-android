@@ -1,6 +1,11 @@
 package com.example.moviejam.repository
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.example.moviejam.data.source.remote.response.movie.Movie
 import com.example.moviejam.data.source.remote.response.movie.MoviesResponse
 import com.example.moviejam.data.source.remote.response.moviedetail.GenresItem as MovieGenresItem
@@ -11,6 +16,8 @@ import com.example.moviejam.data.source.remote.response.tvshowdetail.ProductionC
 import com.example.moviejam.data.source.remote.response.tvshow.TvShow
 import com.example.moviejam.data.source.remote.response.tvshow.TvShowsResponse
 import com.example.moviejam.data.source.remote.response.tvshowdetail.TvShowDetailResponse
+import com.example.moviejam.paging.TestMoviesPagingSource
+import com.example.moviejam.paging.TestTvShowsPagingSource
 import com.example.moviejam.utils.Resource
 
 class FakeRepository : MainRepository {
@@ -39,16 +46,6 @@ class FakeRepository : MainRepository {
 
     fun setPopularTvShowsList(list: List<TvShow>) {
         popularTvShows.addAll(list)
-        refreshLiveDataList()
-    }
-
-    fun setMoviesList(list: List<Movie>) {
-        movies.addAll(list)
-        refreshLiveDataList()
-    }
-
-    fun setTvShowsList(list: List<TvShow>) {
-        tvShows.addAll(list)
         refreshLiveDataList()
     }
 
@@ -99,31 +96,25 @@ class FakeRepository : MainRepository {
             Resource.error("Error!")
     }
 
-    override suspend fun getMovies(): Resource<MoviesResponse> {
-        val result = MoviesResponse(
-            1,
-            1,
-            movies,
-            movies.size
-        )
-        return if (result.movies.isNotEmpty())
-            Resource.success(result)
-        else
-            Resource.error("Error!")
-    }
+    override suspend fun getMovies(): LiveData<PagingData<Movie>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { TestMoviesPagingSource() }
+        ).liveData
 
-    override suspend fun getTvShows(): Resource<TvShowsResponse> {
-        val result = TvShowsResponse(
-            1,
-            1,
-            tvShows,
-            tvShows.size
-        )
-        return if (result.tvShows.isNotEmpty())
-            Resource.success(result)
-        else
-            Resource.error("Error!")
-    }
+    override suspend fun getTvShows(): LiveData<PagingData<TvShow>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { TestTvShowsPagingSource() }
+        ).liveData
 
     override suspend fun getMovieDetail(movieId: String): Resource<MovieDetailResponse> {
         // Simulate that id is 1
@@ -178,4 +169,24 @@ class FakeRepository : MainRepository {
             Resource.error("Error!")
         }
     }
+
+    override suspend fun searchMovies(query: String?): LiveData<PagingData<Movie>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { TestMoviesPagingSource() }
+        ).liveData
+
+    override suspend fun searchTvShows(query: String?): LiveData<PagingData<TvShow>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { TestTvShowsPagingSource() }
+        ).liveData
 }

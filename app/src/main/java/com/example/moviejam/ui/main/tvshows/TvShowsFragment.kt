@@ -6,15 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.moviejam.adapter.TvShowsAdapter
+import com.example.moviejam.adapter.TvShowsPagingAdapter
 import com.example.moviejam.databinding.FragmentTvShowsBinding
 import com.example.moviejam.ui.tvshowdetail.TvShowDetailActivity
-import com.example.moviejam.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +23,7 @@ class TvShowsFragment : Fragment() {
 
     private var fragmentTvShowsBinding: FragmentTvShowsBinding? = null
     private val tvShowsViewModel: TvShowsViewModel by viewModels()
-    private lateinit var tvShowsAdapter: TvShowsAdapter
+    private lateinit var tvShowsAdapter: TvShowsPagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,7 +54,7 @@ class TvShowsFragment : Fragment() {
     }
 
     private fun setupUI() {
-        tvShowsAdapter = TvShowsAdapter()
+        tvShowsAdapter = TvShowsPagingAdapter()
 
         lifecycleScope.launch(Dispatchers.Main) {
             fragmentTvShowsBinding?.let {
@@ -65,7 +64,7 @@ class TvShowsFragment : Fragment() {
                     adapter = tvShowsAdapter
                 }
             }
-            tvShowsAdapter.setOnItemClickListener(object : TvShowsAdapter.OnItemClickListener {
+            tvShowsAdapter.setOnItemClickListener(object : TvShowsPagingAdapter.OnItemClickListener {
                 override fun onClick(id: Int) {
                     Intent(activity, TvShowDetailActivity::class.java).also {
                         it.putExtra(TvShowDetailActivity.EXTRA_ID, id)
@@ -77,26 +76,30 @@ class TvShowsFragment : Fragment() {
     }
 
     private fun setupObserver() {
+        showProgressBar()
+
         lifecycleScope.launch {
-            tvShowsViewModel.setTvShows()
-            tvShowsViewModel.listTvShows.observe(viewLifecycleOwner, { event ->
-                event.peekData().let { resource ->
-                    when (resource.status) {
-                        Status.SUCCESS -> {
-                            hideProgressBar()
-                            resource.data?.let { tvShowsAdapter.setList(it) }
-                        }
-                        Status.ERROR -> {
-                            showProgressBar()
-                            showToast(resource.message.toString())
-                        }
-                        Status.LOADING -> {
-                            showProgressBar()
-                        }
+            tvShowsViewModel.setTvShows().observe(viewLifecycleOwner) { pagingData ->
+                tvShowsAdapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
+                hideProgressBar()
+            }
+        }
+
+        fragmentTvShowsBinding?.svTvShows?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                lifecycleScope.launch {
+                    tvShowsViewModel.searchTvShows(query).observe(viewLifecycleOwner) { pagingData ->
+                        tvShowsAdapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
+                        hideProgressBar()
                     }
                 }
-            })
-        }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
     private fun showProgressBar() {
@@ -105,9 +108,5 @@ class TvShowsFragment : Fragment() {
 
     private fun hideProgressBar() {
         fragmentTvShowsBinding?.progressBar?.isVisible = false
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }

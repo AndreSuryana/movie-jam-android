@@ -1,8 +1,16 @@
 package com.example.moviejam.repository
 
+import androidx.lifecycle.LiveData
+import androidx.paging.*
+import com.example.moviejam.paging.MoviesPagingSource
+import com.example.moviejam.paging.SearchMoviesPagingSource
+import com.example.moviejam.paging.SearchTvShowsPagingSource
+import com.example.moviejam.paging.TvShowsPagingSource
 import com.example.moviejam.data.source.remote.MovieJamAPI
+import com.example.moviejam.data.source.remote.response.movie.Movie
 import com.example.moviejam.data.source.remote.response.movie.MoviesResponse
 import com.example.moviejam.data.source.remote.response.moviedetail.MovieDetailResponse
+import com.example.moviejam.data.source.remote.response.tvshow.TvShow
 import com.example.moviejam.data.source.remote.response.tvshow.TvShowsResponse
 import com.example.moviejam.data.source.remote.response.tvshowdetail.TvShowDetailResponse
 import com.example.moviejam.utils.EspressoIdlingResources
@@ -58,34 +66,32 @@ class MovieJamRepository @Inject constructor(
         }
     }
 
-    override suspend fun getMovies(): Resource<MoviesResponse> {
-        return try {
-            EspressoIdlingResources.increment()
-            val response = api.getPopularMovies()
-            val result = response.body()
-            EspressoIdlingResources.decrement()
-            if (response.isSuccessful && result != null)
-                Resource.success(result)
-            else
-                Resource.error(response.message())
-        } catch (e: Exception) {
-            Resource.error(e.message ?: "An error occurred!")
-        }
+    override suspend fun getMovies(): LiveData<PagingData<Movie>> {
+        EspressoIdlingResources.increment()
+        val pager = Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { MoviesPagingSource(api) }
+        ).liveData
+        EspressoIdlingResources.decrement()
+        return pager
     }
 
-    override suspend fun getTvShows(): Resource<TvShowsResponse> {
-        return try {
-            EspressoIdlingResources.increment()
-            val response = api.getPopularTvShows()
-            val result = response.body()
-            EspressoIdlingResources.decrement()
-            if (response.isSuccessful && result != null)
-                Resource.success(result)
-            else
-                Resource.error(response.message())
-        } catch (e: Exception) {
-            Resource.error(e.message ?: "An error occurred!")
-        }
+    override suspend fun getTvShows(): LiveData<PagingData<TvShow>> {
+        EspressoIdlingResources.increment()
+        val pager = Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { TvShowsPagingSource(api) }
+        ).liveData
+        EspressoIdlingResources.decrement()
+        return pager
     }
 
     override suspend fun getMovieDetail(movieId: String): Resource<MovieDetailResponse> {
@@ -118,34 +124,31 @@ class MovieJamRepository @Inject constructor(
         }
     }
 
-    override suspend fun searchMovies(query: String): Resource<MoviesResponse> {
-        return try {
-            EspressoIdlingResources.increment()
-            val response = api.searchMovies(query = query)
-            val result = response.body()
-            EspressoIdlingResources.decrement()
-            if (response.isSuccessful && result != null)
-                Resource.success(result)
-            else
-                Resource.error(response.message())
-        } catch (e: Exception) {
-            Resource.error(e.message ?: "An error occurred!")
-        }
+    override suspend fun searchMovies(query: String?): LiveData<PagingData<Movie>> {
+        EspressoIdlingResources.increment()
+        val pager = Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { SearchMoviesPagingSource(api, query) }
+        ).liveData
+        EspressoIdlingResources.decrement()
+        return pager
     }
 
-    override suspend fun searchTvShows(query: String): Resource<TvShowsResponse> {
-        return try {
-            EspressoIdlingResources.increment()
-            val response = api.searchTvShows(query = query)
-            val result = response.body()
-            EspressoIdlingResources.decrement()
-            if (response.isSuccessful && result != null) {
-                Resource.success(result)
-            } else {
-                Resource.error(response.message())
-            }
-        } catch (e: Exception) {
-            Resource.error(e.message ?: "An error occurred!")
-        }
+    override suspend fun searchTvShows(query: String?): LiveData<PagingData<TvShow>> {
+        EspressoIdlingResources.increment()
+        val pager = Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { SearchTvShowsPagingSource(api, query) }
+        ).liveData
+        EspressoIdlingResources.decrement()
+        return pager
     }
 }

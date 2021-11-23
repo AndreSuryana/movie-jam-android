@@ -24,7 +24,8 @@ interface MovieJamAPI {
 
     @GET("/3/movie/popular")
     suspend fun getPopularMovies(
-        @Query("api_key") apiKey: String = BuildConfig.API_KEY
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+        @Query("page") page: Int
     ): Response<MoviesResponse>
 
     @GET("/3/tv/top_rated")
@@ -34,7 +35,8 @@ interface MovieJamAPI {
 
     @GET("/3/tv/popular")
     suspend fun getPopularTvShows(
-        @Query("api_key") apiKey: String = BuildConfig.API_KEY
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+        @Query("page") page: Int
     ): Response<TvShowsResponse>
 
     @GET("/3/movie/{movie_id}")
@@ -49,15 +51,17 @@ interface MovieJamAPI {
         @Query("api_key") apiKey: String = BuildConfig.API_KEY
     ): Response<TvShowDetailResponse>
 
-    @GET("/search/movie")
+    @GET("/3/search/movie")
     suspend fun searchMovies(
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
-        @Query("query") query: String
+        @Query("query") query: String?,
+        @Query("page") page: Int
     ): Response<MoviesResponse>
 
-    @GET("/search/tv")
+    @GET("/3/search/tv")
     suspend fun searchTvShows(
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
-        @Query("query") query: String
+        @Query("query") query: String?,
+        @Query("page") page: Int
     ): Response<TvShowsResponse>
 }
