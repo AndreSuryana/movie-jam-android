@@ -1,4 +1,4 @@
-package com.example.moviejam.diffutil
+package com.example.moviejam.adapter.diffutil
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.moviejam.data.source.remote.response.tvshow.TvShow

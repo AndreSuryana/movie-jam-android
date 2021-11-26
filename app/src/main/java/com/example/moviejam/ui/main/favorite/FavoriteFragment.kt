@@ -15,6 +15,7 @@ import com.example.moviejam.adapter.FavoriteAdapter
 import com.example.moviejam.databinding.FragmentFavoriteBinding
 import com.example.moviejam.ui.moviedetail.MovieDetailActivity
 import com.example.moviejam.ui.tvshowdetail.TvShowDetailActivity
+import com.example.moviejam.utils.Status
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -118,17 +119,22 @@ class FavoriteFragment : Fragment() {
             }
         })
 
-        showProgressBar()
         lifecycleScope.launch {
-            favoriteViewModel.getFavoriteMovies().observe(viewLifecycleOwner, { list ->
-                if (list.isNotEmpty()) {
-                    moviesAdapter.setList(list)
-                    hideProgressBar()
-                } else {
-                    showToast("Favorite Movies is Empty!")
-                    hideProgressBar()
+            favoriteViewModel.getFavoriteMovies().observe(viewLifecycleOwner) { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBar()
+                        moviesAdapter.submitList(resource.data)
+                    }
+                    Status.ERROR -> {
+                        hideProgressBar()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> {
+                        showProgressBar()
+                    }
                 }
-            })
+            }
         }
     }
 
@@ -158,17 +164,22 @@ class FavoriteFragment : Fragment() {
             }
         })
 
-        showProgressBar()
         lifecycleScope.launch {
-            favoriteViewModel.getFavoriteTvShows().observe(viewLifecycleOwner, { list ->
-                if (list.isNotEmpty()) {
-                    tvShowsAdapter.setList(list)
-                    hideProgressBar()
-                } else {
-                    showToast("Favorite TV Shows is Empty!")
-                    hideProgressBar()
+            favoriteViewModel.getFavoriteTvShows().observe(viewLifecycleOwner) { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBar()
+                        tvShowsAdapter.submitList(resource.data)
+                    }
+                    Status.ERROR -> {
+                        hideProgressBar()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> {
+                        showProgressBar()
+                    }
                 }
-            })
+            }
         }
     }
 

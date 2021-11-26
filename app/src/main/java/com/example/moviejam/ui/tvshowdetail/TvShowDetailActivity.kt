@@ -117,25 +117,21 @@ class TvShowDetailActivity : AppCompatActivity() {
             // Getting the data
             val idReceived = intent.getIntExtra(EXTRA_ID, 0)
 
-            tvShowDetailViewModel.setData(idReceived)
-
-            tvShowDetailViewModel.dataDetail.observe(this@TvShowDetailActivity, { event ->
-                event.getDataIfNotHandledYet()?.let { resource ->
-                    when (resource.status) {
-                        Status.SUCCESS -> {
-                            hideProgressBar()
-                            resource.data?.let { setContent(it) }
-                        }
-                        Status.ERROR -> {
-                            hideProgressBar()
-                            showToast(resource.message.toString())
-                        }
-                        Status.LOADING -> {
-                            showProgressBar()
-                        }
+            tvShowDetailViewModel.getData(idReceived).observe(this@TvShowDetailActivity) { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBar()
+                        resource.data?.let { setContent(it) }
+                    }
+                    Status.ERROR -> {
+                        hideProgressBar()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> {
+                        showProgressBar()
                     }
                 }
-            })
+            }
         }
     }
 

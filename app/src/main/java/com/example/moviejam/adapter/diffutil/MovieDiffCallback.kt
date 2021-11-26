@@ -1,11 +1,11 @@
-package com.example.moviejam.diffutil
+package com.example.moviejam.adapter.diffutil
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.moviejam.data.source.local.entity.FavoriteEntity
+import com.example.moviejam.data.source.remote.response.movie.Movie
 
-class FavoriteDiffCallback(
-    private val oldList: List<FavoriteEntity>,
-    private val newList: List<FavoriteEntity>
+class MovieDiffCallback(
+    private val oldList: List<Movie>,
+    private val newList: List<Movie>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldList.size

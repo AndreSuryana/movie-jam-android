@@ -2,23 +2,25 @@ package com.example.moviejam.ui.main.tvshows
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.PagingData
-import com.example.moviejam.data.source.remote.response.tvshow.TvShow
-import com.example.moviejam.repository.MainRepository
+import com.example.moviejam.data.repository.MainRepository
+import com.example.moviejam.data.source.remote.response.tvshow.TvShowsResponse
+import com.example.moviejam.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+
+private const val STARTING_PAGE = 1
 
 @HiltViewModel
 class TvShowsViewModel @Inject constructor(
     private val repository: MainRepository
 ) : ViewModel() {
 
-    suspend fun searchTvShows(query: String?): LiveData<PagingData<TvShow>> =
+    suspend fun searchTvShows(query: String?): LiveData<Resource<TvShowsResponse>> =
         if (query != null)
-            repository.searchTvShows(query)
+            repository.searchTvShows(query, STARTING_PAGE)
         else
-            repository.getTvShows()
+            repository.getTvShows(STARTING_PAGE)
 
-    suspend fun setTvShows(): LiveData<PagingData<TvShow>> =
-        repository.getTvShows()
+    suspend fun getTvShows(): LiveData<Resource<TvShowsResponse>> =
+        repository.getTvShows(STARTING_PAGE)
 }

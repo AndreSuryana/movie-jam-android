@@ -1,5 +1,6 @@
 package com.example.moviejam.utils
 
+import com.example.moviejam.data.source.local.entity.FavoriteEntity
 import com.example.moviejam.data.source.remote.response.movie.Movie
 import com.example.moviejam.data.source.remote.response.movie.MoviesResponse
 import com.example.moviejam.data.source.remote.response.moviedetail.MovieDetailResponse
@@ -9,7 +10,7 @@ import com.example.moviejam.data.source.remote.response.tvshowdetail.TvShowDetai
 
 object DummyData {
 
-    val dummyMovies = listOf(
+    private val dummyMovies = listOf(
         Movie(
             580489,
             "/rjkmN1dniUHVYAtwuV3Tji7FsDO.jpg",
@@ -33,7 +34,7 @@ object DummyData {
         )
     )
 
-    val dummyTvShows = listOf(
+    private val dummyTvShows = listOf(
         TvShow(
             90462,
             "/iF8ai2QLNiHV4anwY1TuSGZXqfN.jpg",
@@ -64,11 +65,25 @@ object DummyData {
         totalResults = dummyMovies.size
     )
 
+    val dummyEmptyMoviesResponse = MoviesResponse(
+        page = 1,
+        totalPages = 1,
+        movies = listOf(),
+        totalResults = 0
+    )
+
     val dummyTvShowsResponse = TvShowsResponse(
         page = 1,
         totalPages = 1,
         tvShows = dummyTvShows,
         totalResults = dummyTvShows.size
+    )
+
+    val dummyEmptyTvShowsResponse = TvShowsResponse(
+        page = 1,
+        totalPages = 1,
+        tvShows = listOf(),
+        totalResults = 0
     )
 
     val dummyDetailMovie = MovieDetailResponse(
@@ -97,5 +112,59 @@ object DummyData {
         "Returning Series",
         "ja",
         listOf()
+    )
+
+    val dummyFavoriteMovies = listOf(
+        FavoriteEntity(
+            580489,
+            "/rjkmN1dniUHVYAtwuV3Tji7FsDO.jpg",
+            "Venom: Let There Be Carnage",
+            6.8,
+            "2021-09-30",
+            true
+        ),
+        FavoriteEntity(
+            522402,
+            "/jKuDyqx7jrjiR9cDzB5pxzhJAdv.jpg",
+            "Finch",
+            8.2,
+            "2021-11-04",
+            true
+        ),
+        FavoriteEntity(
+            585245,
+            "",
+            "/ygPTrycbMSFDc5zUpy4K5ZZtQSC.jpg",
+            8.0,
+            "2021-11-10",
+            true
+        )
+    )
+
+    val dummyFavoriteTvShows = listOf(
+        FavoriteEntity(
+            90462,
+            "/iF8ai2QLNiHV4anwY1TuSGZXqfN.jpg",
+            "Chucky",
+            8.0,
+            "2021-10-12",
+            false
+        ),
+        FavoriteEntity(
+            2051,
+            "/6m4uYFAJwkanZXd0n0HUQ0lYHLl.jpg",
+            "The Price Is Right",
+            6.9,
+            "1972-09-04",
+            false
+        ),
+        FavoriteEntity(
+            1991,
+            "/oC9SgtJTDCEpWnTBtVGoAvjl5hb.jpg",
+            "Rachael Ray",
+            5.3,
+            "2006-09-18",
+            false
+        )
     )
 }

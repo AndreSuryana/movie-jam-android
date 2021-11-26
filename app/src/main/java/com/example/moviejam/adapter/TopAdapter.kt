@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviejam.data.source.remote.response.movie.Movie
 import com.example.moviejam.databinding.CardviewTopBinding
-import com.example.moviejam.diffutil.MovieDiffCallback
+import com.example.moviejam.adapter.diffutil.MovieDiffCallback
 import com.example.moviejam.utils.Extensions.loadImage
 
 class TopAdapter : RecyclerView.Adapter<TopAdapter.TopViewHolder>() {
@@ -31,7 +31,7 @@ class TopAdapter : RecyclerView.Adapter<TopAdapter.TopViewHolder>() {
     override fun onBindViewHolder(holder: TopViewHolder, position: Int) {
         val data = listData[position]
         holder.bind(data)
-        holder.itemView.setOnClickListener { onItemClickListener?.onClick(listData[holder.absoluteAdapterPosition].id) }
+        holder.itemView.setOnClickListener { onItemClickListener?.onClick(listData[holder.adapterPosition].id) }
     }
 
     override fun getItemCount(): Int = listData.size

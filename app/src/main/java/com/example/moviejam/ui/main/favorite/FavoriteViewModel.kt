@@ -3,26 +3,28 @@ package com.example.moviejam.ui.main.favorite
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviejam.data.source.local.LocalDataSource
+import androidx.paging.PagedList
+import com.example.moviejam.data.repository.MainRepository
 import com.example.moviejam.data.source.local.entity.FavoriteEntity
+import com.example.moviejam.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val localDataSource: LocalDataSource
+    private val repository: MainRepository
 ) : ViewModel() {
 
-    fun getFavoriteMovies(): LiveData<List<FavoriteEntity>> =
-        localDataSource.getListFavoriteMovies()
+    fun getFavoriteMovies(): LiveData<Resource<PagedList<FavoriteEntity>>> =
+        repository.getListFavoriteMovies()
 
-    fun getFavoriteTvShows(): LiveData<List<FavoriteEntity>> =
-        localDataSource.getListFavoriteTvShows()
+    fun getFavoriteTvShows(): LiveData<Resource<PagedList<FavoriteEntity>>> =
+        repository.getListFavoriteTvShows()
 
     fun deleteFromFavorites(id: Int?) {
         viewModelScope.launch {
-            localDataSource.deleteFromFavorites(id)
+            repository.deleteFromFavorites(id)
         }
     }
 }

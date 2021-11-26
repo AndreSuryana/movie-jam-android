@@ -8,10 +8,12 @@ import com.example.moviejam.data.source.local.LocalDataSource
 import com.example.moviejam.data.source.local.LocalDataSourceImpl
 import com.example.moviejam.data.source.local.room.FavoriteDao
 import com.example.moviejam.data.source.local.room.FavoriteDatabase
-import com.example.moviejam.data.source.remote.MovieJamAPI
+import com.example.moviejam.data.source.remote.api.MovieJamAPI
 import com.example.moviejam.dispatchers.DispatcherProvider
-import com.example.moviejam.repository.MainRepository
-import com.example.moviejam.repository.MovieJamRepository
+import com.example.moviejam.data.repository.MainRepository
+import com.example.moviejam.data.repository.MovieJamRepository
+import com.example.moviejam.data.source.remote.RemoteDataSource
+import com.example.moviejam.data.source.remote.RemoteDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,7 +54,10 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMovieJamRepository(api: MovieJamAPI): MainRepository = MovieJamRepository(api)
+    fun provideMovieJamRepository(
+        remoteDataSource: RemoteDataSource,
+        localDataSource: LocalDataSource
+    ): MainRepository = MovieJamRepository(remoteDataSource, localDataSource)
 
     @Singleton
     @Provides
@@ -83,5 +88,11 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideLocalDataSource(favoriteDao: FavoriteDao): LocalDataSource = LocalDataSourceImpl(favoriteDao)
+    fun provideLocalDataSource(favoriteDao: FavoriteDao): LocalDataSource =
+        LocalDataSourceImpl(favoriteDao)
+
+    @Singleton
+    @Provides
+    fun provideRemoteDataSource(movieJamAPI: MovieJamAPI): RemoteDataSource =
+        RemoteDataSourceImpl(movieJamAPI)
 }

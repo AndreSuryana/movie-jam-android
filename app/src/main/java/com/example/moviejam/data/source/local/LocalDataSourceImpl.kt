@@ -1,6 +1,6 @@
 package com.example.moviejam.data.source.local
 
-import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import com.example.moviejam.data.source.local.entity.FavoriteEntity
 import com.example.moviejam.data.source.local.room.FavoriteDao
 import javax.inject.Inject
@@ -9,10 +9,10 @@ class LocalDataSourceImpl @Inject constructor(
     private val favoriteDao: FavoriteDao
 ) : LocalDataSource {
 
-    override fun getListFavoriteMovies(): LiveData<List<FavoriteEntity>> =
+    override fun getListFavoriteMovies(): DataSource.Factory<Int, FavoriteEntity> =
         favoriteDao.getListFavoriteMovies()
 
-    override fun getListFavoriteTvShows(): LiveData<List<FavoriteEntity>> =
+    override fun getListFavoriteTvShows(): DataSource.Factory<Int, FavoriteEntity> =
         favoriteDao.getListFavoriteTvShows()
 
     override suspend fun checkFavoriteMovies(id: Int?): Int? =

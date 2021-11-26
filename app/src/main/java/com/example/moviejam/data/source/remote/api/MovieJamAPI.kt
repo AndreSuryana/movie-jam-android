@@ -1,4 +1,4 @@
-package com.example.moviejam.data.source.remote
+package com.example.moviejam.data.source.remote.api
 
 import com.example.moviejam.BuildConfig
 import com.example.moviejam.data.source.remote.response.movie.MoviesResponse

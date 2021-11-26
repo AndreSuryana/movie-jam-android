@@ -1,187 +1,200 @@
 package com.example.moviejam.ui.main.home
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.moviejam.MainCoroutineRule
-import com.example.moviejam.getOrAwaitListTest
-import com.example.moviejam.repository.FakeRepository
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.example.moviejam.data.repository.MainRepository
+import com.example.moviejam.data.source.remote.response.movie.MoviesResponse
+import com.example.moviejam.data.source.remote.response.tvshow.TvShowsResponse
 import com.example.moviejam.utils.DummyData
-import com.example.moviejam.utils.Status
+import com.example.moviejam.utils.Resource
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
+import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
+@RunWith(MockitoJUnitRunner::class)
 class HomeViewModelTest {
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @get:Rule
-    var mainCoroutineScope = MainCoroutineRule()
+    @Mock
+    private lateinit var moviesObserver: Observer<Resource<MoviesResponse>>
 
-    private lateinit var fakeRepository: FakeRepository
+    @Mock
+    private lateinit var tvShowsObserver: Observer<Resource<TvShowsResponse>>
 
-    private lateinit var homeViewModel: HomeViewModel
+    @Mock
+    private lateinit var fakeMovieJamRepository: MainRepository
+
+    private lateinit var viewModel: HomeViewModel
+
+    private val dummyMoviesResponse = DummyData.dummyMoviesResponse
+    private val dummyTvShowsResponse = DummyData.dummyTvShowsResponse
+    private val dummyEmptyMoviesResponse = DummyData.dummyEmptyMoviesResponse
+    private val dummyEmptyTvShowsResponse = DummyData.dummyEmptyTvShowsResponse
 
     @Before
     fun setUp() {
-        fakeRepository = FakeRepository()
-        homeViewModel = HomeViewModel(fakeRepository)
-    }
-
-    /**
-     * Test for Top Movies List in Home View Model
-     */
-    @Test
-    fun `observe top movie list, where list is empty, return status ERROR`() {
-
-        // Set movie list in fake repository to empty list
-        fakeRepository.setTopMoviesList(emptyList())
-
-        // Set value of listTopMovies in View Model
-        mainCoroutineScope.launch {
-            homeViewModel.setTopMovies()
-        }
-
-        val value = homeViewModel.listTopMovies.getOrAwaitListTest()
-
-        assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.ERROR)
+        viewModel = HomeViewModel(fakeMovieJamRepository)
     }
 
     @Test
-    fun `observe top movie list, where list is not empty, return status SUCCESS`() {
+    fun `getTopMovies should be success`() = runBlockingTest {
+        val expected = MutableLiveData<Resource<MoviesResponse>>()
+        expected.value = Resource.success(dummyMoviesResponse)
 
-        // Set movie list in fake repository to empty list
-        fakeRepository.setTopMoviesList(DummyData.dummyMovies)
+        `when`(fakeMovieJamRepository.getTrendingMovies()).thenReturn(expected)
 
-        // Set value of listTopMovies in View Model
-        mainCoroutineScope.launch {
-            homeViewModel.setTopMovies()
-        }
+        viewModel.getTopMovies().observeForever(moviesObserver)
+        verify(moviesObserver).onChanged(expected.value)
 
-        val value = homeViewModel.listTopMovies.getOrAwaitListTest()
-        assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.SUCCESS)
+        val expectedValue = expected.value
+        val actualValue = viewModel.getTopMovies().value
+
+        assertThat(actualValue).isEqualTo(expectedValue)
+        assertThat(actualValue?.data?.movies).isEqualTo(expectedValue?.data?.movies)
+        assertThat(actualValue?.data?.movies?.size).isEqualTo(expectedValue?.data?.movies?.size)
     }
 
     @Test
-    fun `ensure the number of top movie list as expected`() {
+    fun `getTopMovies should be success but data is empty`() = runBlockingTest {
+        val expected = MutableLiveData<Resource<MoviesResponse>>()
+        expected.value = Resource.success(dummyEmptyMoviesResponse)
 
-        // Set movie list in fake repository
-        // Which has 3 data
-        fakeRepository.setTopMoviesList(DummyData.dummyMovies)
+        `when`(fakeMovieJamRepository.getTrendingMovies()).thenReturn(expected)
 
-        // Set value of listTopMovies in ViewModel
-        mainCoroutineScope.launch {
-            homeViewModel.setTopMovies()
-        }
+        viewModel.getTopMovies().observeForever(moviesObserver)
+        verify(moviesObserver).onChanged(expected.value)
 
-        val size = homeViewModel.listTopMovies.getOrAwaitListTest().getDataIfNotHandledYet()?.data?.size
+        val expectedMoviesSize = dummyEmptyMoviesResponse.movies.size
+        val actualMoviesSize = viewModel.getTopMovies().value?.data?.movies?.size
 
-        assertThat(size).isEqualTo(3)
-    }
-
-    /**
-     * Test for Popular Movie List in Home View Model
-     */
-    @Test
-    fun `observe popular movie list, where list is empty, return status ERROR`() {
-
-        // Set movie list in fake repository to empty list
-        fakeRepository.setPopularMoviesList(emptyList())
-
-        // Set value of listMovies in View Model
-        mainCoroutineScope.launch {
-            homeViewModel.setPopularMovies()
-        }
-
-        val value = homeViewModel.listPopularMovies.getOrAwaitListTest()
-
-        assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.ERROR)
+        assertThat(actualMoviesSize).isEqualTo(expectedMoviesSize)
     }
 
     @Test
-    fun `observe popular movie list, where list is not empty, return status SUCCESS`() {
+    fun `getTopMovies should be error`() = runBlockingTest {
+        val expectedMessage = "An error occurred!"
+        val expected = MutableLiveData<Resource<MoviesResponse>>()
+        expected.value = Resource.error(expectedMessage)
 
-        // Set movie list in fake repository to empty list
-        fakeRepository.setPopularMoviesList(DummyData.dummyMovies)
+        `when`(fakeMovieJamRepository.getTrendingMovies()).thenReturn(expected)
 
-        // Set value of listMovies in View Model
-        mainCoroutineScope.launch {
-            homeViewModel.setPopularMovies()
-        }
+        viewModel.getTopMovies().observeForever(moviesObserver)
+        verify(moviesObserver).onChanged(expected.value)
 
-        val value = homeViewModel.listPopularMovies.getOrAwaitListTest()
-        assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.SUCCESS)
+        val actualMessage = viewModel.getTopMovies().value?.message
+
+        assertThat(actualMessage).isEqualTo(expectedMessage)
     }
 
     @Test
-    fun `ensure the number of popular movie list as expected`() {
+    fun `getPopularMovies should be success`() = runBlockingTest {
+        val expected = MutableLiveData<Resource<MoviesResponse>>()
+        expected.value = Resource.success(dummyMoviesResponse)
 
-        // Set movie list in fake repository
-        // Which has 3 data
-        fakeRepository.setPopularMoviesList(DummyData.dummyMovies)
+        `when`(fakeMovieJamRepository.getPopularMovies()).thenReturn(expected)
 
-        // Set value of listPopularMovies in ViewModel
-        mainCoroutineScope.launch {
-            homeViewModel.setPopularMovies()
-        }
+        viewModel.getPopularMovies().observeForever(moviesObserver)
+        verify(moviesObserver).onChanged(expected.value)
 
-        val size = homeViewModel.listPopularMovies.getOrAwaitListTest().getDataIfNotHandledYet()?.data?.size
+        val expectedValue = expected.value
+        val actualValue = viewModel.getPopularMovies().value
 
-        assertThat(size).isEqualTo(3)
-    }
-
-    /**
-     * Test for Popular TV SHow List in Home View Model
-     */
-    @Test
-    fun `observe tv show list, where list is empty, return status ERROR`() {
-
-        // Set movie list in fake repository to empty list
-        fakeRepository.setPopularTvShowsList(emptyList())
-
-        // Set value of listMovies in View Model
-        mainCoroutineScope.launch {
-            homeViewModel.setPopularTvShows()
-        }
-
-        val value = homeViewModel.listPopularTvShows.getOrAwaitListTest()
-
-        assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.ERROR)
+        assertThat(actualValue).isEqualTo(expectedValue)
+        assertThat(actualValue?.data?.movies).isEqualTo(expectedValue?.data?.movies)
+        assertThat(actualValue?.data?.movies?.size).isEqualTo(expectedValue?.data?.movies?.size)
     }
 
     @Test
-    fun `observe movie list, where movie list is not empty, return status SUCCESS`() {
+    fun `getPopularMovies should be success but data is empty`() = runBlockingTest {
+        val expected = MutableLiveData<Resource<MoviesResponse>>()
+        expected.value = Resource.success(dummyEmptyMoviesResponse)
 
-        // Set movie list in fake repository to empty list
-        fakeRepository.setPopularTvShowsList(DummyData.dummyTvShows)
+        `when`(fakeMovieJamRepository.getPopularMovies()).thenReturn(expected)
 
-        // Set value of listMovies in View Model
-        mainCoroutineScope.launch {
-            homeViewModel.setPopularTvShows()
-        }
+        viewModel.getPopularMovies().observeForever(moviesObserver)
+        verify(moviesObserver).onChanged(expected.value)
 
-        val value = homeViewModel.listPopularTvShows.getOrAwaitListTest()
-        assertThat(value.getDataIfNotHandledYet()?.status).isEqualTo(Status.SUCCESS)
+        val expectedMoviesSize = dummyEmptyMoviesResponse.movies.size
+        val actualMoviesSize = viewModel.getPopularMovies().value?.data?.movies?.size
+
+        assertThat(actualMoviesSize).isEqualTo(expectedMoviesSize)
     }
 
     @Test
-    fun `ensure the number of popular tv show list as expected`() {
+    fun `getPopularMovies should be error`() = runBlockingTest {
+        val expectedMessage = "An error occurred!"
+        val expected = MutableLiveData<Resource<MoviesResponse>>()
+        expected.value = Resource.error(expectedMessage)
 
-        // Set movie list in fake repository
-        // Which has 3 data
-        fakeRepository.setPopularTvShowsList(DummyData.dummyTvShows)
+        `when`(fakeMovieJamRepository.getPopularMovies()).thenReturn(expected)
 
-        // Set value of listPopularTvShow in ViewModel
-        mainCoroutineScope.launch {
-            homeViewModel.setPopularTvShows()
-        }
+        viewModel.getPopularMovies().observeForever(moviesObserver)
+        verify(moviesObserver).onChanged(expected.value)
 
-        val size = homeViewModel.listPopularTvShows.getOrAwaitListTest().getDataIfNotHandledYet()?.data?.size
+        val actualMessage = viewModel.getPopularMovies().value?.message
 
-        assertThat(size).isEqualTo(3)
+        assertThat(actualMessage).isEqualTo(expectedMessage)
+    }
+
+    @Test
+    fun `getPopularTvShows should be success`() = runBlockingTest {
+        val expected = MutableLiveData<Resource<TvShowsResponse>>()
+        expected.value = Resource.success(dummyTvShowsResponse)
+
+        `when`(fakeMovieJamRepository.getPopularTvShows()).thenReturn(expected)
+
+        viewModel.getPopularTvShows().observeForever(tvShowsObserver)
+        verify(tvShowsObserver).onChanged(expected.value)
+
+        val expectedValue = expected.value
+        val actualValue = viewModel.getPopularTvShows().value
+
+        assertThat(actualValue).isEqualTo(expectedValue)
+        assertThat(actualValue?.data?.tvShows).isEqualTo(expectedValue?.data?.tvShows)
+        assertThat(actualValue?.data?.tvShows?.size).isEqualTo(expectedValue?.data?.tvShows?.size)
+    }
+
+    @Test
+    fun `getPopularTvShows should be success but data is empty`() = runBlockingTest {
+        val expected = MutableLiveData<Resource<TvShowsResponse>>()
+        expected.value = Resource.success(dummyEmptyTvShowsResponse)
+
+        `when`(fakeMovieJamRepository.getPopularTvShows()).thenReturn(expected)
+
+        viewModel.getPopularTvShows().observeForever(tvShowsObserver)
+        verify(tvShowsObserver).onChanged(expected.value)
+
+        val expectedMoviesSize = dummyEmptyTvShowsResponse.tvShows.size
+        val actualMoviesSize = viewModel.getPopularTvShows().value?.data?.tvShows?.size
+
+        assertThat(actualMoviesSize).isEqualTo(expectedMoviesSize)
+    }
+
+    @Test
+    fun `getPopularTvShows should be error`() = runBlockingTest {
+        val expectedMessage = "An error occurred!"
+        val expected = MutableLiveData<Resource<TvShowsResponse>>()
+        expected.value = Resource.error(expectedMessage)
+
+        `when`(fakeMovieJamRepository.getPopularTvShows()).thenReturn(expected)
+
+        viewModel.getPopularTvShows().observeForever(tvShowsObserver)
+        verify(tvShowsObserver).onChanged(expected.value)
+
+        val actualMessage = viewModel.getPopularTvShows().value?.message
+
+        assertThat(actualMessage).isEqualTo(expectedMessage)
     }
 }

@@ -67,24 +67,20 @@ class HomeFragment : Fragment() {
         val topMoviesAdapter = TopAdapter()
 
         // Observer
-        homeViewModel.setTopMovies()
-
         lifecycleScope.launch {
-            homeViewModel.listTopMovies.observe(viewLifecycleOwner, { event ->
-                event.peekData().let { resource ->
-                    when (resource.status) {
-                        Status.SUCCESS -> {
-                            hideProgressBarTopMovies()
-                            resource.data?.let { topMoviesAdapter.setListTopMovies(it) }
-                        }
-                        Status.ERROR -> {
-                            showProgressBarTopMovies()
-                            showToast(resource.message.toString())
-                        }
-                        Status.LOADING -> showProgressBarTopMovies()
+            homeViewModel.getTopMovies().observe(viewLifecycleOwner) { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBarTopMovies()
+                        resource.data?.movies?.let { topMoviesAdapter.setListTopMovies(it) }
                     }
+                    Status.ERROR -> {
+                        showProgressBarTopMovies()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> showProgressBarTopMovies()
                 }
-            })
+            }
         }
 
         // Recycler View
@@ -110,24 +106,20 @@ class HomeFragment : Fragment() {
         val popularMoviesAdapter = MoviesAdapter()
 
         // Observer
-        homeViewModel.setPopularMovies()
-
         lifecycleScope.launch {
-            homeViewModel.listPopularMovies.observe(viewLifecycleOwner, { event ->
-                event.peekData().let { resource ->
-                    when (resource.status) {
-                        Status.SUCCESS -> {
-                            hideProgressBarPopularMovies()
-                            resource.data?.let { popularMoviesAdapter.setList(it) }
-                        }
-                        Status.ERROR -> {
-                            showProgressBarPopularMovies()
-                            showToast(resource.message.toString())
-                        }
-                        Status.LOADING -> showProgressBarPopularMovies()
+            homeViewModel.getPopularMovies().observe(viewLifecycleOwner) { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBarPopularMovies()
+                        resource.data?.movies?.let { popularMoviesAdapter.setList(it) }
                     }
+                    Status.ERROR -> {
+                        showProgressBarPopularMovies()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> showProgressBarPopularMovies()
                 }
-            })
+            }
         }
 
         // Recycler View
@@ -153,26 +145,22 @@ class HomeFragment : Fragment() {
         val popularTvShowsAdapter = TvShowsAdapter()
 
         // Observer
-        homeViewModel.setPopularTvShows()
-
         lifecycleScope.launch {
-            homeViewModel.listPopularTvShows.observe(viewLifecycleOwner, { event ->
-                event.peekData().let { resource ->
-                    when (resource.status) {
-                        Status.SUCCESS -> {
-                            hideProgressBarPopularTvShows()
-                            resource.data?.let { popularTvShowsAdapter.setList(it) }
-                        }
-                        Status.ERROR -> {
-                            showProgressBarPopularTvShows()
-                            showToast(resource.message.toString())
-                        }
-                        Status.LOADING -> {
-                            showProgressBarPopularTvShows()
-                        }
+            homeViewModel.getPopularTvShows().observe(viewLifecycleOwner) { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBarPopularTvShows()
+                        resource.data?.tvShows?.let { popularTvShowsAdapter.setList(it) }
+                    }
+                    Status.ERROR -> {
+                        showProgressBarPopularTvShows()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> {
+                        showProgressBarPopularTvShows()
                     }
                 }
-            })
+            }
         }
 
         // Recycler View

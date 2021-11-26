@@ -112,7 +112,7 @@ dependencies {
         pagingVersion = '2.1.1'
 
         // Paging
-        pagingVersion = '3.1.0'
+        pagingVersion = '2.1.2'
     }
 
     // Kotlin
@@ -182,5 +182,6 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
 
     // Paging
-    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+    //noinspection KtxExtensionAvailable,GradleDependency
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
 }

@@ -2,19 +2,16 @@ package com.example.moviejam.ui.moviedetail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.moviejam.R
-import com.example.moviejam.constant.Constants
 import com.example.moviejam.data.source.remote.response.moviedetail.GenresItem
 import com.example.moviejam.data.source.remote.response.moviedetail.MovieDetailResponse
 import com.example.moviejam.data.source.remote.response.moviedetail.ProductionCompaniesItem
 import com.example.moviejam.databinding.ActivityDetailBinding
+import com.example.moviejam.utils.Extensions.loadImage
 import com.example.moviejam.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -101,15 +98,6 @@ class MovieDetailActivity : AppCompatActivity() {
         return genres.joinToString(separator = ", ")
     }
 
-    private fun ImageView.loadImage(path: String) {
-        val url = Constants.IMAGE_BASE_URL + path
-        Glide.with(this.context)
-            .load(url)
-            .apply(RequestOptions.placeholderOf(R.drawable.placeholder))
-            .error(R.drawable.placeholder)
-            .into(this)
-    }
-
     private fun setupObserver() {
 
         // Setup Detail Data
@@ -117,24 +105,21 @@ class MovieDetailActivity : AppCompatActivity() {
             // Getting the data
             val idReceived = intent.getIntExtra(EXTRA_ID, 0)
 
-            movieDetailViewModel.setData(idReceived)
-            movieDetailViewModel.dataDetail.observe(this@MovieDetailActivity, { event ->
-                event.getDataIfNotHandledYet()?.let { resource ->
-                    when (resource.status) {
-                        Status.SUCCESS -> {
-                            hideProgressBar()
-                            resource.data?.let { setContent(it) }
-                        }
-                        Status.ERROR -> {
-                            hideProgressBar()
-                            showToast(resource.message.toString())
-                        }
-                        Status.LOADING -> {
-                            showProgressBar()
-                        }
+            movieDetailViewModel.getData(idReceived).observe(this@MovieDetailActivity) { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        hideProgressBar()
+                        resource.data?.let { setContent(it) }
+                    }
+                    Status.ERROR -> {
+                        hideProgressBar()
+                        showToast(resource.message.toString())
+                    }
+                    Status.LOADING -> {
+                        showProgressBar()
                     }
                 }
-            })
+            }
         }
     }
 

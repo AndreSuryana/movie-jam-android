@@ -23,7 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         // Setup Bottom Navigation View
         val navView: BottomNavigationView = activityMainBinding.navView
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController = navHostFragment.navController
 
         navView.setupWithNavController(navController)

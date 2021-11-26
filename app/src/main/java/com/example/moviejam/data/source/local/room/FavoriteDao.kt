@@ -1,6 +1,6 @@
 package com.example.moviejam.data.source.local.room
 
-import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -10,10 +10,10 @@ import com.example.moviejam.data.source.local.entity.FavoriteEntity
 interface FavoriteDao {
 
     @Query("SELECT * FROM favoriteentities WHERE isMovie = 1")
-    fun getListFavoriteMovies(): LiveData<List<FavoriteEntity>>
+    fun getListFavoriteMovies(): DataSource.Factory<Int, FavoriteEntity>
 
     @Query("SELECT * FROM favoriteentities WHERE isMovie = 0")
-    fun getListFavoriteTvShows(): LiveData<List<FavoriteEntity>>
+    fun getListFavoriteTvShows(): DataSource.Factory<Int, FavoriteEntity>
 
     @Query("SELECT count(*) FROM favoriteentities WHERE isMovie = 1 AND id = :id")
     suspend fun checkFavoriteMovies(id: Int?): Int?
